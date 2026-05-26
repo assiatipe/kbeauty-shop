@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Catalogue K-Beauty — Glow.kr{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top:3rem; padding-bottom:4rem;">
+  
+  <!-- Header -->
+  <div class="mb-4">
+    <h1 class="section-title">
+      {% if categorie_active %}
+        {{ categorie_active.nom }}
+      {% elif q %}
+        Résultats pour "{{ q }}"
+      {% else %}
+        Tous les produits
+      {% endif %}
+    </h1>
+    <div class="section-divider"></div>
+    <p class="text-muted-custom">
+      {% if produits %}{{ produits|length }} produit{{ produits|length|pluralize }}{% else %}Aucun produit{% endif %} trouvé
+    </p>
+  </div>
+
+  <div class="row g-4">
+    
+    <!-- Sidebar filtres -->
+    <div class="col-lg-3">
+      <div class="filtres-sidebar">
+        
+        <!-- Recherche -->
+        <div class="mb-4">
+          <p class="filtres-titre">Recherche</p>
+          <form action="" method="get">
+            <input type="text" name="q" value="{{ q }}" placeholder="Nom, marque, ingrédient..." class="form-control" style="font-size:0.85rem;">
+            {% if categorie_active %}
+            <input type="hidden" name="categorie" value="{{ categorie_active.slug }}">
+            {% endif %}
+          </form>
+        </div>
+
+        <!-- Catégories -->
+        <div class="mb-4">
+          <p class="filtres-titre">Catégories</p>
+          <div>
+            <a href="{% url 'catalogue' %}{% if q %}?q={{ q }}{% endif %}" 
+               class="filtre-tag {% if not categorie_active %}active{% endif %}">
+              Tous
+            </a>
+            {% for cat in categories %}
+            <a href="{% url 'catalogue' %}?categorie={{ cat.slug }}{% if q %}&q={{ q }}{% endif %}" 
+               class="filtre-tag {% if categorie_active.slug == cat.slug %}active{% endif %}">
+              {{ cat.nom }}
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Tri -->
+        <div>
+          <p class="filtres-titre">Trier par</p>
+          <div>
+            <a href="?{% if categorie_active %}categorie={{ categorie_active.slug }}&{% endif %}{% if q %}q={{ q }}&{% endif %}tri=date"
+               class="filtre-tag {% if tri == 'date' or not tri %}active{% endif %}">Plus récents</a>
+            <a href="?{% if categorie_active %}categorie={{ categorie_active.slug }}&{% endif %}{% if q %}q={{ q }}&{% endif %}tri=prix_asc"
+               class="filtre-tag {% if tri == 'prix_asc' %}active{% endif %}">Prix croissant</a>
+            <a href="?{% if categorie_active %}categorie={{ categorie_active.slug }}&{% endif %}{% if q %}q={{ q }}&{% endif %}tri=prix_desc"
+               class="filtre-tag {% if tri == 'prix_desc' %}active{% endif %}">Prix décroissant</a>
+            <a href="?{% if categorie_active %}categorie={{ categorie_active.slug }}&{% endif %}{% if q %}q={{ q }}&{% endif %}tri=note"
+               class="filtre-tag {% if tri == 'note' %}active{% endif %}">Mieux notés</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grille produits -->
+    <div class="col-lg-9">
+      {% if produits %}
+      <div class="row g-4">
+        {% for produit in produits %}
+        <div class="col-6 col-md-4">
+          <div class="product-card">
+            {% if not produit.en_stock %}
+            <span class="badge-rupture">Rupture</span>
+            {% endif %}
+            
+            {% if produit.image %}
+            <img src="{{ produit.image.url }}" alt="{{ produit.nom }}" style="width:100%; height:200px; object-fit:cover;">
+            {% else %}
+            <div style="height:200px;">
+              {% include 'partials/product_placeholder.html' %}
+            </div>
+            {% endif %}
+            
+            <div class="product-card-body">
+              <div class="product-card-categorie">{{ produit.categorie.nom }}</div>
+              <div class="product-card-nom">{{ produit.nom|truncatechars:40 }}</div>
+              {% if produit.marque %}<div class="product-card-marque">{{ produit.marque }}</div>{% endif %}
+              
+              <div class="d-flex align-items-center gap-1 mb-2">
+                {% for i in "12345" %}
+                <span style="font-size:0.8rem; color:{% if forloop.counter <= produit.note_moyenne %}#f5a623{% else %}#ddd{% endif %};">★</span>
+                {% endfor %}
+                <span style="font-size:0.75rem; color:var(--texte-clair);">({{ produit.nombre_avis }})</span>
+              </div>
+              
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="product-card-prix">{{ produit.prix }} MAD</span>
+                {% if produit.en_stock %}
+                <form action="{% url 'ajouter_au_panier' produit.id %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                  <button type="submit" class="btn-rose" style="padding:0.35rem 0.8rem; font-size:0.78rem;" onclick="event.stopPropagation();">
+                    + Panier
+                  </button>
+                </form>
+                {% endif %}
+              </div>
+            </div>
+            <a href="{% url 'detail_produit' produit.slug %}" class="stretched-link"></a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="text-center" style="padding:5rem 2rem;">
+        <svg viewBox="0 0 120 120" width="100" height="100" xmlns="http://www.w3.org/2000/svg" style="margin:0 auto 1.5rem;">
+          <circle cx="60" cy="60" r="55" fill="var(--gris-doux)"/>
+          <text x="60" y="72" text-anchor="middle" font-size="40">🔍</text>
+        </svg>
+        <h3 style="font-family:'Playfair Display', serif; color:var(--texte-clair);">Aucun produit trouvé</h3>
+        <p style="color:var(--texte-clair);">Essayez d'autres mots-clés ou explorez nos catégories.</p>
+        <a href="{% url 'catalogue' %}" class="btn-rose mt-3">Voir tous les produits</a>
+      </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+{% endblock %}

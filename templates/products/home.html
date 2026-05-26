@@ -1,0 +1,744 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Glow.kr — K-Beauty Skincare Coréen{% endblock %}
+
+{% block content %}
+
+<!-- ===== HERO PREMIUM BACKGROUND FULL ===== -->
+<style>
+  .hero-cover {
+    position: relative;
+    min-height: 650px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+
+    background-image:
+      linear-gradient(
+        90deg,
+        rgba(248, 238, 248, 0.98) 0%,
+        rgba(248, 238, 248, 0.94) 28%,
+        rgba(248, 238, 248, 0.70) 42%,
+        rgba(248, 238, 248, 0.20) 58%,
+        rgba(248, 238, 248, 0.00) 100%
+      ),
+      url("{% static 'images/hero/hero-kbeauty-scene.png' %}");
+
+    background-size: cover;
+    background-position: center right;
+    background-repeat: no-repeat;
+  }
+
+  .hero-cover::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(255, 210, 230, 0.35), transparent 30%),
+      radial-gradient(circle at 50% 20%, rgba(215, 195, 255, 0.20), transparent 35%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero-cover .container {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-cover-content {
+    max-width: 600px;
+    padding: 4rem 0;
+  }
+
+  .hero-cover-kicker {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--texte-clair);
+    margin-bottom: 1rem;
+  }
+
+  .hero-cover-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 4.35rem;
+    line-height: 1.04;
+    color: var(--texte);
+    margin-bottom: 1.2rem;
+  }
+
+  .hero-cover-title em {
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .hero-cover-subtitle {
+    color: var(--texte-clair);
+    font-size: 1.02rem;
+    line-height: 1.85;
+    max-width: 560px;
+    margin-bottom: 2rem;
+  }
+
+  .hero-cover-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .hero-cover-actions .btn-rose,
+  .hero-cover-actions .btn-outline-rose {
+    padding: 0.9rem 2.2rem !important;
+    font-size: 0.95rem !important;
+  }
+
+  .hero-cover-stats {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-cover-stat strong {
+    display: block;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.85rem;
+    line-height: 1;
+    color: var(--texte);
+  }
+
+  .hero-cover-stat span {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--texte-clair);
+    font-weight: 700;
+    margin-top: 0.35rem;
+  }
+
+  @media (max-width: 1200px) {
+    .hero-cover {
+      min-height: 600px;
+      background-position: 62% center;
+    }
+
+    .hero-cover-title {
+      font-size: 3.8rem;
+    }
+  }
+
+  @media (max-width: 991px) {
+    .hero-cover {
+      min-height: auto;
+      background-image:
+        linear-gradient(
+          180deg,
+          rgba(248, 238, 248, 0.98) 0%,
+          rgba(248, 238, 248, 0.90) 45%,
+          rgba(248, 238, 248, 0.45) 100%
+        ),
+        url("{% static 'images/hero/hero-kbeauty-scene.png' %}");
+      background-position: center bottom;
+      background-size: cover;
+      padding-bottom: 17rem;
+      text-align: center;
+    }
+
+    .hero-cover-content {
+      max-width: 100%;
+      padding: 3.5rem 0 1rem;
+    }
+
+    .hero-cover-title {
+      font-size: 3.1rem;
+    }
+
+    .hero-cover-subtitle {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-cover-actions,
+    .hero-cover-stats {
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .hero-cover {
+      padding-bottom: 12rem;
+    }
+
+    .hero-cover-title {
+      font-size: 2.45rem;
+    }
+
+    .hero-cover-subtitle {
+      font-size: 0.92rem;
+    }
+
+    .hero-cover-actions .btn-rose,
+    .hero-cover-actions .btn-outline-rose {
+      width: 100%;
+      text-align: center;
+    }
+
+    .hero-cover-stats {
+      gap: 1.2rem;
+    }
+
+    .hero-cover-stat strong {
+      font-size: 1.45rem;
+    }
+  }
+</style>
+
+<section class="hero-cover">
+  <div class="container">
+    <div class="hero-cover-content">
+
+      <p class="hero-cover-kicker">
+        Skincare coréen authentique
+      </p>
+
+      <h1 class="hero-cover-title">
+        Révélez<br>
+        <em>l’éclat naturel</em><br>
+        de votre peau
+      </h1>
+
+      <p class="hero-cover-subtitle">
+        Découvrez notre sélection de soins K-Beauty : essences, sérums,
+        crèmes et masques issus des meilleures marques coréennes.
+      </p>
+
+      <div class="hero-cover-actions">
+        <a href="{% url 'catalogue' %}" class="btn-rose">
+          Découvrir la boutique
+        </a>
+
+        <a href="{% url 'chatbot' %}" class="btn-outline-rose">
+          Trouver ma routine
+        </a>
+      </div>
+
+      <div class="hero-cover-stats">
+        <div class="hero-cover-stat">
+          <strong>100%</strong>
+          <span>Authentique</span>
+        </div>
+
+        <div class="hero-cover-stat">
+          <strong>{{ produits_count|default:"30+" }}</strong>
+          <span>Produits</span>
+        </div>
+
+        <div class="hero-cover-stat">
+          <strong>{{ categories|length|default:"8" }}</strong>
+          <span>Catégories</span>
+        </div>
+
+        <div class="hero-cover-stat">
+          <strong>IA</strong>
+          <span>Recommandations</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- ===== MARQUES PARTENAIRES ===== -->
+<section style="background:#fff;padding:2rem 0 2.2rem;border-bottom:1px solid #eee8f5;">
+  <div class="container">
+
+    <p style="text-align:center;font-size:0.72rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--texte-clair);margin-bottom:1.5rem;">
+      Nos marques partenaires
+    </p>
+
+    <div style="display:flex;justify-content:center;align-items:center;gap:3.2rem;flex-wrap:wrap;">
+      <span style="font-size:1.65rem;font-weight:800;letter-spacing:1px;color:#1f1b2e;">COSRX</span>
+      <span style="font-family:'Playfair Display',Georgia,serif;font-size:1.5rem;font-weight:700;font-style:italic;color:#1f1b2e;">Beauty of Joseon</span>
+      <span style="font-size:1.55rem;font-weight:800;color:#1f1b2e;">Anua</span>
+      <span style="font-size:1.35rem;font-weight:800;letter-spacing:2px;color:#1f1b2e;">SOME BY MI</span>
+      <span style="font-size:1.25rem;font-weight:800;letter-spacing:4px;color:#1f1b2e;">SKIN1004</span>
+      <span style="font-size:1.45rem;font-weight:700;color:#1f1b2e;">numbuzin</span>
+      <span style="font-size:1.4rem;font-weight:800;letter-spacing:3px;color:#1f1b2e;">TIRTIR</span>
+      <span style="font-family:'Playfair Display',Georgia,serif;font-size:1.65rem;font-style:italic;font-weight:700;color:#1f1b2e;">Missha</span>
+    </div>
+
+  </div>
+</section>
+<!-- ===== CATÉGORIES ===== -->
+<section style="background:#fff; padding:4rem 0 4.5rem;">
+  <div class="container">
+
+    <div class="text-center mb-5">
+      <p style="font-size:0.72rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--texte-clair);margin-bottom:0.4rem;">
+        Explorer par
+      </p>
+      <h2 class="section-title">Catégories</h2>
+      <div class="section-divider mx-auto"></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);row-gap:2.2rem;column-gap:3.5rem;max-width:1180px;margin:0 auto;">
+
+      {% for categorie in categories %}
+      <a href="{% url 'catalogue' %}?categorie={{ categorie.slug }}"
+         style="display:flex;align-items:center;gap:1rem;text-decoration:none;color:inherit;">
+
+        <div style="width:58px;height:58px;min-width:58px;max-width:58px;min-height:58px;max-height:58px;overflow:hidden;flex-shrink:0;">
+
+          {% with nom=categorie.nom|lower %}
+
+            {% if 'essence' in nom or 'toner' in nom %}
+            <svg viewBox="0 0 64 64" style="width:58px;height:58px;display:block;">
+              <circle cx="32" cy="32" r="30" fill="#EAF5FF"/>
+              <rect x="22" y="24" width="20" height="30" rx="6" fill="#A8D8FF"/>
+              <path d="M22 28 Q22 22 32 22 Q42 22 42 28" fill="#7FC2F4"/>
+              <rect x="27" y="13" width="10" height="11" rx="4" fill="#7DB5E8"/>
+              <rect x="29" y="8" width="6" height="7" rx="3" fill="#5C9BD6"/>
+            </svg>
+
+            {% elif 'sérum' in nom or 'serum' in nom or 'ampoule' in nom %}
+            <svg viewBox="0 0 64 64" style="width:58px;height:58px;display:block;">
+              <circle cx="32" cy="32" r="30" fill="#F3E6FF"/>
+              <path d="M25 20 Q23 32 22 48 Q22 55 32 55 Q42 55 42 48 Q41 32 39 20 Z" fill="#C68AF0"/>
+              <path d="M25 20 Q25 14 32 13 Q39 14 39 20 Z" fill="#B36DE4"/>
+              <rect x="28" y="6" width="8" height="9" rx="3" fill="#9E55D2"/>
+            </svg>
+
+            {% elif 'crème' in nom or 'creme' in nom or 'hydrat' in nom %}
+            <svg viewBox="0 0 64 64" style="width:58px;height:58px;display:block;">
+              <circle cx="32" cy="32" r="30" fill="#FFF0F8"/>
+              <rect x="14" y="34" width="36" height="18" rx="8" fill="#F5A9D0"/>
+              <rect x="13" y="27" width="38" height="11" rx="6" fill="#E985BD"/>
+              <ellipse cx="32" cy="27" rx="19" ry="6" fill="#D76AAA"/>
+            </svg>
+
+            {% elif 'nettoy' in nom %}
+            <svg viewBox="0 0 64 64" style="width:58px;height:58px;display:block;">
+              <circle cx="32" cy="32" r="30" fill="#EAFBF5"/>
+              <path d="M24 20 L24 50 Q24 56 32 56 Q40 56 40 50 L40 20 Z" fill="#B4EAD9"/>
+              <path d="M24 20 Q24 12 32 12 Q40 12 40 20 Z" fill="#8EDCC8"/>
+              <rect x="28" y="7" width="8" height="7" rx="3" fill="#5BBBA6"/>
+            </svg>
+
+            {% elif 'masque' in nom or 'mask' in nom %}
+            <svg viewBox="0 0 64 64" style="width:58px;height:58px;display:block;">
+              <circle cx="32" cy="32" r="30" fill="#FFF7F1"/>
+              <ellipse cx="32" cy="34" rx="18" ry="21" fill="#FFF0F8"/>
+              <ellipse cx="25" cy="29" rx="5" ry="3" fill="#F5B6D0"/>
+              <ellipse cx="39" cy="29" rx="5" ry="3" fill="#F5B6D0"/>
+              <path d="M26 40 Q32 45 38 40" stroke="#E88AAD" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+
+            {% elif 'solaire' in nom or 'spf' in nom %}
+            <svg viewBox="0 0 64 64" style="width:58px;height:58px;display:block;">
+              <circle cx="32" cy="32" r="30" fill="#FFF8DD"/>
+              <circle cx="32" cy="32" r="13" fill="#FFD43B"/>
+              <g stroke="#F7B900" stroke-width="2" stroke-linecap="round">
+                <line x1="32" y1="8" x2="32" y2="15"/>
+                <line x1="32" y1="49" x2="32" y2="56"/>
+                <line x1="8" y1="32" x2="15" y2="32"/>
+                <line x1="49" y1="32" x2="56" y2="32"/>
+                <line x1="15" y1="15" x2="20" y2="20"/>
+                <line x1="44" y1="44" x2="49" y2="49"/>
+                <line x1="49" y1="15" x2="44" y2="20"/>
+                <line x1="20" y1="44" x2="15" y2="49"/>
+              </g>
+            </svg>
+
+            {% elif 'yeux' in nom or 'eye' in nom %}
+            <svg viewBox="0 0 64 64" style="width:58px;height:58px;display:block;">
+              <circle cx="32" cy="32" r="30" fill="#F3ECFF"/>
+              <rect x="16" y="34" width="32" height="18" rx="7" fill="#C7A6F1"/>
+              <rect x="15" y="28" width="34" height="10" rx="5" fill="#B98BEA"/>
+              <ellipse cx="32" cy="28" rx="17" ry="6" fill="#A775DD"/>
+            </svg>
+
+            {% elif 'exfol' in nom %}
+            <svg viewBox="0 0 64 64" style="width:58px;height:58px;display:block;">
+              <circle cx="32" cy="32" r="30" fill="#EAFBF0"/>
+              <rect x="21" y="25" width="22" height="28" rx="8" fill="#A6E0B8"/>
+              <path d="M21 30 Q21 24 32 24 Q43 24 43 30" fill="#7ACF95"/>
+              <circle cx="27" cy="38" r="2.5" fill="#EFFFF2"/>
+              <circle cx="35" cy="43" r="2.2" fill="#EFFFF2"/>
+            </svg>
+
+            {% else %}
+            <svg viewBox="0 0 64 64" style="width:58px;height:58px;display:block;">
+              <circle cx="32" cy="32" r="30" fill="#FFF0F8"/>
+              <circle cx="32" cy="32" r="13" fill="#F5A9D0"/>
+            </svg>
+            {% endif %}
+
+          {% endwith %}
+        </div>
+
+        <div>
+          <h3 style="font-family:'Nunito',sans-serif;font-size:0.98rem;font-weight:800;color:var(--texte);margin:0 0 0.15rem;">
+            {{ categorie.nom }}
+          </h3>
+          <p style="font-size:0.82rem;color:var(--texte-clair);margin:0;font-weight:600;">
+            {{ categorie.produits.count }} produit{{ categorie.produits.count|pluralize }}
+          </p>
+        </div>
+
+      </a>
+      {% endfor %}
+
+    </div>
+
+  </div>
+</section>
+<!-- ===== PRODUITS VEDETTES ===== -->
+<section style="padding:3.5rem 0;background:#fff;">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <p style="font-size:0.72rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--texte-clair);margin-bottom:0.3rem;">
+          Notre sélection
+        </p>
+        <h2 class="section-title" style="margin-bottom:0;">Produits vedettes</h2>
+        <div class="section-divider"></div>
+      </div>
+      <a href="{% url 'catalogue' %}" class="btn-outline-rose">Voir tout</a>
+    </div>
+
+    <div class="row g-4">
+      {% for produit in produits_vedette %}
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="product-card" style="position:relative;">
+          {% if produit.image %}
+            <img src="{{ produit.image.url }}" alt="{{ produit.nom }}" style="width:100%;height:210px;object-fit:cover;">
+          {% else %}
+            <div style="height:210px;background:linear-gradient(135deg,#f7efff,#fde8f0);display:flex;align-items:center;justify-content:center;font-size:3rem;">
+              🧴
+            </div>
+          {% endif %}
+
+          <div class="product-card-body">
+            <div class="product-card-categorie">{{ produit.categorie.nom }}</div>
+            <div class="product-card-nom">{{ produit.nom|truncatechars:38 }}</div>
+            {% if produit.marque %}
+              <div class="product-card-marque">{{ produit.marque }}</div>
+            {% endif %}
+
+            <div class="d-flex align-items-center gap-1 mb-2">
+              {% for i in "12345" %}
+              <span style="font-size:0.78rem;color:{% if forloop.counter <= produit.note_moyenne %}#f5a623{% else %}#ddd{% endif %};">★</span>
+              {% endfor %}
+              <span style="font-size:0.72rem;color:var(--texte-clair);">({{ produit.nombre_avis }})</span>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="product-card-prix">{{ produit.prix }} MAD</span>
+
+              {% if produit.en_stock and user.is_authenticated %}
+              <form action="{% url 'ajouter_au_panier' produit.id %}" method="post" style="position:relative;z-index:2;">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{% url 'home' %}">
+                <button type="submit" class="btn-rose" style="padding:0.35rem 0.8rem;font-size:0.75rem;">
+                  + Panier
+                </button>
+              </form>
+              {% elif produit.en_stock %}
+              <a href="{% url 'login' %}?next={{ request.get_full_path }}" class="btn-outline-rose" style="position:relative;z-index:2;padding:0.32rem 0.7rem;font-size:0.74rem;">
+                Login
+              </a>
+              {% else %}
+              <span style="font-size:0.76rem;color:#e09090;font-weight:700;">Rupture</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <a href="{% url 'detail_produit' produit.slug %}" class="stretched-link"></a>
+        </div>
+      </div>
+
+      {% empty %}
+      <div class="col-12 text-center">
+        <p style="color:var(--texte-clair);">
+          Aucun produit vedette pour le moment. Ajoutez des produits depuis le dashboard admin.
+        </p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ===== POURQUOI GLOW.KR ===== -->
+<section style="padding:3.5rem 0;background:linear-gradient(180deg,#fff 0%,#fff7fb 100%);">
+  <div class="container">
+
+    <p style="text-align:center;font-size:0.72rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--texte-clair);margin-bottom:2rem;">
+      Pourquoi Glow.kr ?
+    </p>
+
+    <div class="row g-4 justify-content-center">
+
+      <!-- Carte 1 -->
+      <div class="col-md-4">
+        <div style="background:white;border:1px solid #f0e6f5;border-radius:18px;padding:1.4rem 1.5rem;height:100%;display:flex;align-items:center;gap:1.2rem;box-shadow:0 6px 24px rgba(180,150,200,0.08);">
+          
+          <div style="width:62px;height:62px;border-radius:16px;background:#fff0f8;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 64 64" width="42" height="42" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="32" cy="24" r="13" fill="#e88ab0"/>
+              <path d="M22 35l-4 18 14-7 14 7-4-18" fill="#f4b6cf"/>
+              <circle cx="32" cy="24" r="7" fill="#fff0f8"/>
+              <circle cx="32" cy="24" r="3" fill="#e88ab0"/>
+            </svg>
+          </div>
+
+          <div>
+            <h5 style="font-family:'Nunito',sans-serif;font-size:0.98rem;font-weight:800;color:var(--texte);margin-bottom:0.35rem;">
+              Produits authentiques
+            </h5>
+            <p style="font-size:0.86rem;color:var(--texte-clair);line-height:1.6;margin:0;">
+              Des soins K-Beauty sélectionnés avec soin, inspirés des meilleures routines coréennes.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Carte 2 -->
+      <div class="col-md-4">
+        <div style="background:white;border:1px solid #f0e6f5;border-radius:18px;padding:1.4rem 1.5rem;height:100%;display:flex;align-items:center;gap:1.2rem;box-shadow:0 6px 24px rgba(180,150,200,0.08);">
+          
+          <div style="width:62px;height:62px;border-radius:16px;background:#f3ecff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 64 64" width="42" height="42" xmlns="http://www.w3.org/2000/svg">
+              <path d="M32 6l5 17 17 5-17 5-5 17-5-17-17-5 17-5z" fill="#b98bea"/>
+              <circle cx="49" cy="15" r="3" fill="#e8d8ff"/>
+              <circle cx="15" cy="48" r="2.5" fill="#e8d8ff"/>
+            </svg>
+          </div>
+
+          <div>
+            <h5 style="font-family:'Nunito',sans-serif;font-size:0.98rem;font-weight:800;color:var(--texte);margin-bottom:0.35rem;">
+              Recommandations intelligentes
+            </h5>
+            <p style="font-size:0.86rem;color:var(--texte-clair);line-height:1.6;margin:0;">
+              Trouvez les soins adaptés grâce à des recommandations selon votre peau et vos besoins.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Carte 3 -->
+      <div class="col-md-4">
+        <div style="background:white;border:1px solid #f0e6f5;border-radius:18px;padding:1.4rem 1.5rem;height:100%;display:flex;align-items:center;gap:1.2rem;box-shadow:0 6px 24px rgba(180,150,200,0.08);">
+          
+          <div style="width:62px;height:62px;border-radius:16px;background:#ffeaf1;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 64 64" width="44" height="44" xmlns="http://www.w3.org/2000/svg">
+              <rect x="10" y="24" width="30" height="18" rx="4" fill="#e88ab0"/>
+              <path d="M40 30h8l6 7v5H40z" fill="#f4b6cf"/>
+              <circle cx="20" cy="46" r="5" fill="#4a3f5c"/>
+              <circle cx="48" cy="46" r="5" fill="#4a3f5c"/>
+              <circle cx="20" cy="46" r="2" fill="white"/>
+              <circle cx="48" cy="46" r="2" fill="white"/>
+              <rect x="15" y="18" width="20" height="8" rx="3" fill="#f7c5d0"/>
+            </svg>
+          </div>
+
+          <div>
+            <h5 style="font-family:'Nunito',sans-serif;font-size:0.98rem;font-weight:800;color:var(--texte);margin-bottom:0.35rem;">
+              Expérience fluide
+            </h5>
+            <p style="font-size:0.86rem;color:var(--texte-clair);line-height:1.6;margin:0;">
+              Panier, commandes, avis clients et suivi depuis un espace personnel simple.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- ===== ROUTINE K-BEAUTY ===== -->
+<section style="background:linear-gradient(135deg,#f7c5d0 0%,#f6d0dc 45%,#eadcff 100%);padding:4rem 0;">
+  <div class="container text-center">
+    <p style="font-size:0.72rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:rgba(70,50,90,0.6);margin-bottom:0.4rem;">
+      La méthode coréenne
+    </p>
+
+    <h2 class="section-title mb-2">Routine K-Beauty en 10 étapes</h2>
+
+    <p style="color:var(--texte-clair);max-width:600px;margin:0 auto 2.3rem;font-size:0.95rem;">
+      Adoptez la routine coréenne pour une peau lumineuse, hydratée et éclatante.
+    </p>
+
+    <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
+      {% for etape in etapes_routine %}
+      <div style="background:rgba(255,255,255,0.72);border-radius:50px;padding:0.5rem 1rem;font-size:0.82rem;font-weight:700;color:var(--texte);box-shadow:0 4px 12px rgba(160,100,140,0.08);">
+        <span style="color:var(--rose-fonce);margin-right:0.35rem;">{{ forloop.counter }}.</span>{{ etape }}
+      </div>
+      {% empty %}
+      <div style="background:rgba(255,255,255,0.72);border-radius:50px;padding:0.5rem 1rem;font-size:0.82rem;font-weight:700;">1. Huile nettoyante</div>
+      <div style="background:rgba(255,255,255,0.72);border-radius:50px;padding:0.5rem 1rem;font-size:0.82rem;font-weight:700;">2. Nettoyant mousse</div>
+      <div style="background:rgba(255,255,255,0.72);border-radius:50px;padding:0.5rem 1rem;font-size:0.82rem;font-weight:700;">3. Tonique</div>
+      <div style="background:rgba(255,255,255,0.72);border-radius:50px;padding:0.5rem 1rem;font-size:0.82rem;font-weight:700;">4. Sérum</div>
+      <div style="background:rgba(255,255,255,0.72);border-radius:50px;padding:0.5rem 1rem;font-size:0.82rem;font-weight:700;">5. Crème hydratante</div>
+      <div style="background:rgba(255,255,255,0.72);border-radius:50px;padding:0.5rem 1rem;font-size:0.82rem;font-weight:700;">6. Protection solaire</div>
+      {% endfor %}
+    </div>
+
+    <a href="{% url 'chatbot' %}" class="btn-rose" style="padding:0.85rem 2.2rem;font-size:0.95rem;">
+      Parler à notre assistante K-Beauty
+    </a>
+  </div>
+</section>
+
+<!-- ===== NOUVEAUTÉS ===== -->
+<section style="padding:3.5rem 0;background:#fff;">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <p style="font-size:0.72rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--texte-clair);margin-bottom:0.3rem;">
+          Arrivals
+        </p>
+        <h2 class="section-title" style="margin-bottom:0;">Nouveautés</h2>
+        <div class="section-divider"></div>
+      </div>
+      <a href="{% url 'catalogue' %}?tri=date" class="btn-outline-rose">Voir tout</a>
+    </div>
+
+    <div class="row g-4">
+      {% for produit in nouveautes %}
+      <div class="col-6 col-md-3">
+        <div class="product-card" style="position:relative;">
+          <span class="badge-new">Nouveau</span>
+
+          {% if produit.image %}
+            <img src="{{ produit.image.url }}" alt="{{ produit.nom }}" style="width:100%;height:190px;object-fit:cover;">
+          {% else %}
+            <div style="height:190px;background:linear-gradient(135deg,#f7efff,#eefaff);display:flex;align-items:center;justify-content:center;font-size:3rem;">
+              🌿
+            </div>
+          {% endif %}
+
+          <div class="product-card-body">
+            <div class="product-card-categorie">{{ produit.categorie.nom }}</div>
+            <div class="product-card-nom">{{ produit.nom|truncatechars:35 }}</div>
+
+            <div class="d-flex justify-content-between align-items-center mt-2">
+              <span class="product-card-prix">{{ produit.prix }} MAD</span>
+
+              {% if produit.en_stock and user.is_authenticated %}
+              <form action="{% url 'ajouter_au_panier' produit.id %}" method="post" style="position:relative;z-index:2;">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{% url 'home' %}">
+                <button type="submit" class="btn-rose" style="padding:0.32rem 0.7rem;font-size:0.74rem;">
+                  + Panier
+                </button>
+              </form>
+              {% endif %}
+            </div>
+          </div>
+
+          <a href="{% url 'detail_produit' produit.slug %}" class="stretched-link"></a>
+        </div>
+      </div>
+
+      {% empty %}
+      <div class="col-12 text-center">
+        <p style="color:var(--texte-clair);">
+          Aucun nouveau produit pour le moment.
+        </p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ===== AVIS CLIENTS ===== -->
+<section style="padding:3.5rem 0 4rem;background:#fff;">
+  <div class="container">
+    <div class="text-center mb-4">
+      <p style="font-size:0.72rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--texte-clair);margin-bottom:0.3rem;">
+        Ce qu’elles disent
+      </p>
+      <h2 class="section-title">Avis clients</h2>
+      <div class="section-divider mx-auto"></div>
+    </div>
+
+    <div class="row g-4">
+      {% for temoignage in temoignages %}
+      <div class="col-md-4">
+        <div style="background:white;border-radius:var(--rayon-lg);padding:1.6rem;box-shadow:0 4px 20px var(--ombre);height:100%;border-top:3px solid var(--rose);">
+          <div style="color:#f5a623;margin-bottom:0.8rem;">★★★★★</div>
+          <p style="font-size:0.9rem;line-height:1.8;color:var(--texte);font-style:italic;">
+            “{{ temoignage.commentaire }}”
+          </p>
+          <div style="display:flex;align-items:center;gap:0.8rem;margin-top:1rem;">
+            <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--lavande));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;">
+              {{ temoignage.auteur.first_name|slice:":1"|default:"G" }}
+            </div>
+            <div>
+              <div style="font-weight:800;font-size:0.88rem;">
+                {{ temoignage.auteur.first_name|default:temoignage.auteur.username }}
+              </div>
+              <div style="font-size:0.74rem;color:var(--texte-clair);">
+                {{ temoignage.produit.nom|truncatechars:28 }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% empty %}
+      <div class="col-md-4">
+        <div style="background:white;border-radius:var(--rayon-lg);padding:1.6rem;box-shadow:0 4px 20px var(--ombre);height:100%;border-top:3px solid var(--rose);">
+          <div style="color:#f5a623;margin-bottom:0.8rem;">★★★★★</div>
+          <p style="font-size:0.9rem;line-height:1.8;color:var(--texte);font-style:italic;">
+            “Très belle sélection de produits coréens, le site est simple à utiliser et les recommandations sont utiles.”
+          </p>
+          <div style="display:flex;align-items:center;gap:0.8rem;margin-top:1rem;">
+            <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--lavande));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;">S</div>
+            <div>
+              <div style="font-weight:800;font-size:0.88rem;">Sarah B.</div>
+              <div style="font-size:0.74rem;color:var(--texte-clair);">Casablanca</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div style="background:white;border-radius:var(--rayon-lg);padding:1.6rem;box-shadow:0 4px 20px var(--ombre);height:100%;border-top:3px solid var(--lavande-fonce);">
+          <div style="color:#f5a623;margin-bottom:0.8rem;">★★★★★</div>
+          <p style="font-size:0.9rem;line-height:1.8;color:var(--texte);font-style:italic;">
+            “Le chatbot m’a aidée à choisir une routine adaptée à ma peau sensible. L’expérience est très fluide.”
+          </p>
+          <div style="display:flex;align-items:center;gap:0.8rem;margin-top:1rem;">
+            <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--lavande));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;">I</div>
+            <div>
+              <div style="font-weight:800;font-size:0.88rem;">Imane K.</div>
+              <div style="font-size:0.74rem;color:var(--texte-clair);">Rabat</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div style="background:white;border-radius:var(--rayon-lg);padding:1.6rem;box-shadow:0 4px 20px var(--ombre);height:100%;border-top:3px solid var(--mint-fonce);">
+          <div style="color:#f5a623;margin-bottom:0.8rem;">★★★★★</div>
+          <p style="font-size:0.9rem;line-height:1.8;color:var(--texte);font-style:italic;">
+            “J’aime beaucoup la page produit : avis, stock, panier et suggestions IA sont très clairs.”
+          </p>
+          <div style="display:flex;align-items:center;gap:0.8rem;margin-top:1rem;">
+            <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--lavande));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;">L</div>
+            <div>
+              <div style="font-weight:800;font-size:0.88rem;">Leila M.</div>
+              <div style="font-size:0.74rem;color:var(--texte-clair);">Marrakech</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

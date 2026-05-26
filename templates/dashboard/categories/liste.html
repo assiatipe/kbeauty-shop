@@ -1,0 +1,34 @@
+{% extends 'dashboard/base_admin.html' %}
+{% block title %}Catégories — Admin{% endblock %}
+{% block page_title %}Gestion des catégories{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-end mb-4">
+  <a href="{% url 'ajouter_categorie' %}" class="btn-admin btn-admin-primary">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Ajouter une catégorie
+  </a>
+</div>
+<div class="admin-card">
+  <table class="admin-table">
+    <thead><tr><th>Nom</th><th>Slug</th><th>Nb produits</th><th>Description</th><th>Actions</th></tr></thead>
+    <tbody>
+      {% for cat in categories %}
+      <tr>
+        <td><strong>{{ cat.nom }}</strong></td>
+        <td style="color:var(--texte-clair);font-size:0.82rem;">{{ cat.slug }}</td>
+        <td><span style="background:var(--lavande);padding:0.2rem 0.7rem;border-radius:50px;font-size:0.78rem;font-weight:700;">{{ cat.nb_produits }}</span></td>
+        <td style="color:var(--texte-clair);font-size:0.85rem;">{{ cat.description|truncatechars:50 }}</td>
+        <td>
+          <div class="d-flex gap-1">
+            <a href="{% url 'modifier_categorie' cat.id %}" class="btn-admin btn-admin-primary" style="padding:0.25rem 0.6rem;font-size:0.78rem;">Modifier</a>
+            <a href="{% url 'supprimer_categorie' cat.id %}" class="btn-admin btn-admin-danger" style="padding:0.25rem 0.6rem;font-size:0.78rem;">Supprimer</a>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" style="text-align:center;color:var(--texte-clair);padding:2rem;">Aucune catégorie.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

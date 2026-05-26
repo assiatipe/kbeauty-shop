@@ -1,0 +1,127 @@
+{% extends 'dashboard/base_admin.html' %}
+{% block title %}Stocks — Admin{% endblock %}
+{% block page_title %}Gestion des stocks{% endblock %}
+{% block content %}
+
+<div class="row g-3 mb-4">
+  <div class="col-auto">
+    <div style="background:var(--mint);border-radius:12px;padding:0.8rem 1.5rem;">
+      <span style="font-size:0.78rem;font-weight:700;color:#2d7a70;">
+        Produits suivis : {{ produits|length }} produit{{ produits|length|pluralize }}
+      </span>
+    </div>
+  </div>
+
+  <div class="col-auto">
+    <div style="background:#fde0e0;border-radius:12px;padding:0.8rem 1.5rem;">
+      <span style="font-size:0.78rem;font-weight:700;color:#9a3030;">
+        Ruptures : {{ produits_rupture_count }} produit{{ produits_rupture_count|pluralize }}
+      </span>
+    </div>
+  </div>
+
+  <div class="col-auto">
+    <div style="background:var(--peche);border-radius:12px;padding:0.8rem 1.5rem;">
+      <span style="font-size:0.78rem;font-weight:700;color:#9a6030;">
+        Stocks faibles : {{ produits_stock_faible_count }} produit{{ produits_stock_faible_count|pluralize }}
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="admin-card">
+  <div class="admin-card-header">
+    <h6 class="admin-card-title">Mise à jour des stocks (triés par quantité croissante)</h6>
+  </div>
+
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Produit</th>
+        <th>Catégorie</th>
+        <th>Stock actuel</th>
+        <th>État</th>
+        <th>Mettre à jour</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for produit in produits %}
+      <tr>
+        <td>
+          <div style="font-weight:600;">
+            {{ produit.nom|truncatechars:40 }}
+          </div>
+
+          {% if produit.marque %}
+          <div style="font-size:0.78rem;color:var(--texte-clair);">
+            {{ produit.marque }}
+          </div>
+          {% endif %}
+        </td>
+
+        <td>
+          <span style="background:var(--gris-doux);padding:0.2rem 0.6rem;border-radius:50px;font-size:0.78rem;">
+            {{ produit.categorie.nom }}
+          </span>
+        </td>
+
+        <td>
+          <span style="font-size:1.2rem;font-weight:700;color:{% if produit.quantite_stock == 0 %}#9a3030{% elif produit.quantite_stock < 5 %}#9a6030{% else %}#2d7a70{% endif %};">
+            {{ produit.quantite_stock }}
+          </span>
+        </td>
+
+        <td>
+          {% if produit.quantite_stock == 0 %}
+          <span style="background:#fde0e0;color:#9a3030;padding:0.25rem 0.7rem;border-radius:50px;font-size:0.75rem;font-weight:700;">
+            Rupture
+          </span>
+          {% elif produit.quantite_stock < 5 %}
+          <span style="background:var(--peche);color:#9a6030;padding:0.25rem 0.7rem;border-radius:50px;font-size:0.75rem;font-weight:700;">
+            Stock faible
+          </span>
+          {% else %}
+          <span style="background:var(--mint);color:#2d7a70;padding:0.25rem 0.7rem;border-radius:50px;font-size:0.75rem;font-weight:700;">
+            OK
+          </span>
+          {% endif %}
+        </td>
+
+        <td>
+          <form method="post" class="d-flex gap-2 align-items-center">
+            {% csrf_token %}
+            <input type="hidden" name="produit_id" value="{{ produit.id }}">
+
+            <input
+              type="number"
+              name="quantite"
+              value="{{ produit.quantite_stock }}"
+              min="0"
+              class="admin-form-control"
+              style="width:80px;padding:0.3rem 0.5rem;"
+            >
+
+            <button
+              type="submit"
+              class="btn-admin btn-admin-success"
+              style="padding:0.3rem 0.8rem;white-space:nowrap;"
+            >
+              Mettre à jour
+            </button>
+          </form>
+        </td>
+      </tr>
+
+      {% empty %}
+      <tr>
+        <td colspan="5" style="text-align:center;color:var(--texte-clair);padding:2rem;">
+          Aucun produit trouvé.
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

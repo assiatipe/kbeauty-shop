@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Mes commandes — Glow.kr{% endblock %}
+{% block content %}
+<div class="container" style="padding-top:3rem; padding-bottom:4rem;">
+  <h1 class="section-title mb-1">Mes commandes</h1>
+  <div class="section-divider"></div>
+
+  {% if commandes %}
+  <div style="background:var(--blanc); border-radius:var(--rayon-lg); overflow:hidden; box-shadow:0 4px 20px var(--ombre);">
+    <table class="table-dashboard" style="width:100%;">
+      <thead>
+        <tr>
+          <th>N°</th>
+          <th>Date</th>
+          <th>Produits</th>
+          <th>Total</th>
+          <th>Statut</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for commande in commandes %}
+        <tr>
+          <td><strong>#{{ commande.id }}</strong></td>
+          <td>{{ commande.date_commande|date:"d/m/Y" }}</td>
+          <td style="color:var(--texte-clair); font-size:0.85rem;">
+            {{ commande.lignes.count }} article{{ commande.lignes.count|pluralize }}
+          </td>
+          <td><strong style="color:var(--rose-fonce);">{{ commande.montant_total }} MAD</strong></td>
+          <td><span class="statut-badge statut-{{ commande.statut }}">{{ commande.get_statut_display }}</span></td>
+          <td>
+            <a href="{% url 'detail_commande' commande.id %}" style="font-size:0.85rem; color:var(--rose-fonce); font-weight:600;">
+              Détails
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="text-center" style="padding:4rem;">
+    <p style="color:var(--texte-clair);">Vous n'avez pas encore passé de commande.</p>
+    <a href="{% url 'catalogue' %}" class="btn-rose mt-2">Découvrir nos produits</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

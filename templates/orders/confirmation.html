@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Commande confirmée — Glow.kr{% endblock %}
+{% block content %}
+<div class="container" style="padding-top:4rem; padding-bottom:4rem; text-align:center;">
+  <svg viewBox="0 0 120 120" width="100" height="100" xmlns="http://www.w3.org/2000/svg" style="margin:0 auto 2rem;">
+    <circle cx="60" cy="60" r="55" fill="var(--mint)" opacity="0.4"/>
+    <circle cx="60" cy="60" r="45" fill="var(--mint)" opacity="0.3"/>
+    <polyline points="38,62 52,76 82,46" stroke="var(--mint-fonce)" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <h1 class="section-title mb-3">Commande confirmée</h1>
+  <p style="color:var(--texte-clair); font-size:1.05rem; margin-bottom:0.5rem;">
+    Merci {{ commande.client.first_name|default:commande.client.username }} !
+  </p>
+  <p style="color:var(--texte-clair);">Votre commande <strong>#{{ commande.id }}</strong> a bien été enregistrée.</p>
+  <div style="background:var(--gris-doux); border-radius:var(--rayon); padding:1.5rem; max-width:400px; margin:2rem auto;">
+    <div class="d-flex justify-content-between mb-2">
+      <span style="color:var(--texte-clair);">Numéro de commande</span>
+      <strong>#{{ commande.id }}</strong>
+    </div>
+    <div class="d-flex justify-content-between mb-2">
+      <span style="color:var(--texte-clair);">Montant total</span>
+      <strong style="color:var(--rose-fonce);">{{ commande.montant_total }} MAD</strong>
+    </div>
+    <div class="d-flex justify-content-between">
+      <span style="color:var(--texte-clair);">Statut</span>
+      <span class="statut-badge statut-{{ commande.statut }}">{{ commande.get_statut_display }}</span>
+    </div>
+  </div>
+  <div class="d-flex gap-3 justify-content-center mt-3">
+    <a href="{% url 'historique_commandes' %}" class="btn-outline-rose">Mes commandes</a>
+    <a href="{% url 'catalogue' %}" class="btn-rose">Continuer mes achats</a>
+  </div>
+</div>
+{% endblock %}

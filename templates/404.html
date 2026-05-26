@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Page introuvable — Glow.kr{% endblock %}
+{% block content %}
+<div class="container" style="padding:6rem 2rem; text-align:center;">
+  <svg viewBox="0 0 160 160" width="130" height="130" xmlns="http://www.w3.org/2000/svg" style="margin:0 auto 2rem;">
+    <circle cx="80" cy="80" r="75" fill="var(--gris-doux)"/>
+    <circle cx="80" cy="75" r="30" fill="var(--rose)" opacity="0.5"/>
+    <circle cx="80" cy="75" r="20" fill="var(--rose-fonce)" opacity="0.3"/>
+    <text x="80" y="82" text-anchor="middle" font-size="22" fill="var(--texte)" font-family="serif" font-style="italic">404</text>
+    <circle cx="55" cy="118" r="5" fill="var(--lavande-fonce)" opacity="0.6"/>
+    <circle cx="110" cy="125" r="4" fill="var(--mint-fonce)" opacity="0.6"/>
+    <circle cx="35" cy="100" r="3" fill="var(--rose-fonce)" opacity="0.5"/>
+  </svg>
+  <h1 class="section-title mb-3">Page introuvable</h1>
+  <p style="color:var(--texte-clair); max-width:400px; margin:0 auto 2rem;">
+    Oops ! Cette page n'existe pas ou a été déplacée. Retournez à l'accueil pour continuer votre routine K-Beauty.
+  </p>
+  <a href="/" class="btn-rose" style="padding:0.9rem 2.5rem; font-size:1rem;">Retour à l'accueil</a>
+</div>
+{% endblock %}

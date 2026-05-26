@@ -1,0 +1,83 @@
+{% extends 'dashboard/base_admin.html' %}
+{% block title %}Produits — Admin{% endblock %}
+{% block page_title %}Gestion des produits{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="d-flex gap-2">
+    <form method="get" class="d-flex gap-2">
+      <input type="text" name="q" value="{{ q }}" placeholder="Rechercher..." class="admin-form-control" style="width:200px;">
+      <select name="cat" class="admin-form-control" style="width:160px;">
+        <option value="">Toutes catégories</option>
+        {% for c in categories %}<option value="{{ c.slug }}" {% if cat == c.slug %}selected{% endif %}>{{ c.nom }}</option>{% endfor %}
+      </select>
+      <button type="submit" class="btn-admin btn-admin-secondary">Filtrer</button>
+    </form>
+  </div>
+  <a href="{% url 'ajouter_produit' %}" class="btn-admin btn-admin-primary">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Ajouter un produit
+  </a>
+</div>
+
+<div class="admin-card">
+  <div class="admin-card-header">
+    <h6 class="admin-card-title">{{ produits|length }} produit{{ produits|length|pluralize }}</h6>
+  </div>
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Produit</th>
+        <th>Catégorie</th>
+        <th>Prix</th>
+        <th>Stock</th>
+        <th>Dispo</th>
+        <th>Note</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for produit in produits %}
+      <tr>
+        <td>
+          <div style="font-weight:700;font-size:0.88rem;">{{ produit.nom|truncatechars:35 }}</div>
+          {% if produit.marque %}<div style="font-size:0.78rem;color:var(--texte-clair);">{{ produit.marque }}</div>{% endif %}
+        </td>
+        <td><span style="background:var(--gris-doux);padding:0.2rem 0.6rem;border-radius:50px;font-size:0.78rem;font-weight:600;">{{ produit.categorie.nom }}</span></td>
+        <td style="font-weight:700;color:var(--rose-fonce);">{{ produit.prix }} MAD</td>
+        <td>
+          <span style="font-weight:700;color:{% if produit.quantite_stock == 0 %}#9a3030{% elif produit.quantite_stock < 5 %}#9a6030{% else %}#2d7a70{% endif %};">
+            {{ produit.quantite_stock }}
+          </span>
+        </td>
+        <td>
+          {% if produit.disponible %}
+          <span style="background:var(--mint);color:#2d7a70;padding:0.2rem 0.6rem;border-radius:50px;font-size:0.75rem;font-weight:700;">Oui</span>
+          {% else %}
+          <span style="background:#fde0e0;color:#9a3030;padding:0.2rem 0.6rem;border-radius:50px;font-size:0.75rem;font-weight:700;">Non</span>
+          {% endif %}
+        </td>
+        <td style="color:#f5a623;">
+          {% with note=produit.note_moyenne %}{{ note }}/5{% endwith %}
+        </td>
+        <td>
+          <div class="d-flex gap-1">
+            <a href="{% url 'detail_produit' produit.slug %}" target="_blank" class="btn-admin btn-admin-secondary" style="padding:0.25rem 0.6rem;font-size:0.78rem;" title="Voir">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </a>
+            <a href="{% url 'modifier_produit' produit.id %}" class="btn-admin btn-admin-primary" style="padding:0.25rem 0.6rem;font-size:0.78rem;" title="Modifier">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </a>
+            <a href="{% url 'supprimer_produit' produit.id %}" class="btn-admin btn-admin-danger" style="padding:0.25rem 0.6rem;font-size:0.78rem;" title="Supprimer">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+            </a>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7" style="text-align:center;color:var(--texte-clair);padding:3rem;">Aucun produit trouvé.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

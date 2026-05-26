@@ -1,0 +1,10 @@
+Django==4.2.9
+mysqlclient==2.2.4
+Pillow==10.2.0
+python-dotenv==1.0.0
+gunicorn==21.2.0
+whitenoise==6.6.0
+
+# Recommandations IA
+scikit-learn==1.4.0
+numpy==1.26.3

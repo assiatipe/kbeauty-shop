@@ -1,0 +1,53 @@
+{% extends 'dashboard/base_admin.html' %}
+{% block title %}Clients — Admin{% endblock %}
+{% block page_title %}Gestion des clients{% endblock %}
+{% block content %}
+
+<div class="mb-4">
+  <form method="get" class="d-flex gap-2">
+    <input type="text" name="q" value="{{ q }}" placeholder="Rechercher par nom, email, username..." class="admin-form-control" style="max-width:350px;">
+    <button type="submit" class="btn-admin btn-admin-secondary">Rechercher</button>
+    {% if q %}<a href="{% url 'gestion_clients' %}" class="btn-admin btn-admin-secondary">Effacer</a>{% endif %}
+  </form>
+</div>
+
+<div class="admin-card">
+  <div class="admin-card-header">
+    <h6 class="admin-card-title">{{ clients|length }} client{{ clients|length|pluralize }}</h6>
+  </div>
+  <table class="admin-table">
+    <thead><tr><th>Client</th><th>Email</th><th>Inscription</th><th>Commandes</th><th>Dernière commande</th><th>Statut</th></tr></thead>
+    <tbody>
+      {% for client in clients %}
+      <tr>
+        <td>
+          <div style="font-weight:700;">{{ client.first_name }} {{ client.last_name }}</div>
+          <div style="font-size:0.78rem;color:var(--texte-clair);">@{{ client.username }}</div>
+        </td>
+        <td style="font-size:0.85rem;">{{ client.email }}</td>
+        <td style="font-size:0.82rem;color:var(--texte-clair);">{{ client.date_joined|date:"d/m/Y" }}</td>
+        <td style="text-align:center;">
+          <span style="background:var(--lavande);padding:0.2rem 0.7rem;border-radius:50px;font-size:0.78rem;font-weight:700;">
+            {{ client.commandes.count }}
+          </span>
+        </td>
+        <td style="font-size:0.82rem;color:var(--texte-clair);">
+          {% with last=client.commandes.first %}
+            {% if last %}{{ last.date_commande|date:"d/m/Y" }}{% else %}—{% endif %}
+          {% endwith %}
+        </td>
+        <td>
+          {% if client.is_active %}
+          <span style="background:var(--mint);color:#2d7a70;padding:0.2rem 0.6rem;border-radius:50px;font-size:0.75rem;font-weight:700;">Actif</span>
+          {% else %}
+          <span style="background:#fde0e0;color:#9a3030;padding:0.2rem 0.6rem;border-radius:50px;font-size:0.75rem;font-weight:700;">Inactif</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" style="text-align:center;color:var(--texte-clair);padding:2rem;">Aucun client trouvé.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

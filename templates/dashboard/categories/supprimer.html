@@ -1,0 +1,22 @@
+{% extends 'dashboard/base_admin.html' %}
+{% block title %}Supprimer {{ categorie.nom }} — Admin{% endblock %}
+{% block page_title %}Supprimer une catégorie{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <div class="admin-card">
+      <div class="admin-card-body text-center" style="padding:3rem 2rem;">
+        <h5 style="font-family:'Playfair Display',serif;margin-bottom:0.5rem;">Supprimer "{{ categorie.nom }}" ?</h5>
+        <p style="color:#9a3030;font-size:0.9rem;margin-bottom:2rem;">Attention : tous les produits de cette catégorie seront aussi supprimés.</p>
+        <div class="d-flex gap-3 justify-content-center">
+          <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn-admin btn-admin-danger" style="padding:0.7rem 2rem;">Confirmer</button>
+          </form>
+          <a href="{% url 'liste_categories' %}" class="btn-admin btn-admin-secondary" style="padding:0.7rem 1.5rem;">Annuler</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

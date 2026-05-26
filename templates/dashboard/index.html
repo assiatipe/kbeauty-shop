@@ -1,0 +1,130 @@
+{% extends 'dashboard/base_admin.html' %}
+{% block title %}Dashboard — Glow.kr Admin{% endblock %}
+{% block page_title %}Vue d'ensemble{% endblock %}
+{% block content %}
+
+<!-- Stats -->
+<div class="row g-4 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="admin-card" style="border-left:4px solid var(--rose-fonce);">
+      <div class="admin-card-body">
+        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--texte-clair);margin-bottom:0.4rem;">Produits</div>
+        <div style="font-size:2rem;font-weight:700;font-family:'Playfair Display',serif;">{{ total_produits }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="admin-card" style="border-left:4px solid var(--mint-fonce);">
+      <div class="admin-card-body">
+        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--texte-clair);margin-bottom:0.4rem;">Clients</div>
+        <div style="font-size:2rem;font-weight:700;font-family:'Playfair Display',serif;">{{ total_clients }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="admin-card" style="border-left:4px solid var(--lavande-fonce);">
+      <div class="admin-card-body">
+        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--texte-clair);margin-bottom:0.4rem;">Commandes</div>
+        <div style="font-size:2rem;font-weight:700;font-family:'Playfair Display',serif;">{{ total_commandes }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="admin-card" style="border-left:4px solid #e8c0a0;">
+      <div class="admin-card-body">
+        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--texte-clair);margin-bottom:0.4rem;">Chiffre d'affaires</div>
+        <div style="font-size:1.6rem;font-weight:700;font-family:'Playfair Display',serif;">{{ chiffre_affaires|floatformat:0 }} MAD</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Revenus 30j + ruptures -->
+<div class="row g-4 mb-4">
+  <div class="col-md-4">
+    <div class="admin-card" style="background:linear-gradient(135deg,var(--mint),var(--lavande));border:none;">
+      <div class="admin-card-body">
+        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;opacity:0.7;margin-bottom:0.4rem;">Revenus (30 derniers jours)</div>
+        <div style="font-size:1.8rem;font-weight:700;font-family:'Playfair Display',serif;">{{ revenus_recents|floatformat:0 }} MAD</div>
+      </div>
+    </div>
+  </div>
+  {% if produits_rupture %}
+  <div class="col-md-8">
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <h6 class="admin-card-title" style="color:#9a3030;">Ruptures de stock ({{ produits_rupture.count }})</h6>
+        <a href="{% url 'gestion_stocks' %}" class="btn-admin btn-admin-danger">Gérer stocks</a>
+      </div>
+      <div class="admin-card-body" style="padding:1rem 1.5rem;">
+        <div class="d-flex flex-wrap gap-2">
+          {% for p in produits_rupture %}
+          <a href="{% url 'modifier_produit' p.id %}" style="background:#fde0e0;color:#9a3030;padding:0.3rem 0.9rem;border-radius:50px;font-size:0.8rem;font-weight:600;text-decoration:none;">{{ p.nom|truncatechars:25 }}</a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<div class="row g-4">
+  <!-- Commandes récentes -->
+  <div class="col-lg-8">
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <h6 class="admin-card-title">Commandes récentes</h6>
+        <a href="{% url 'gestion_commandes' %}" class="btn-admin btn-admin-secondary">Voir tout</a>
+      </div>
+      <table class="admin-table">
+        <thead><tr><th>N°</th><th>Client</th><th>Date</th><th>Total</th><th>Statut</th><th></th></tr></thead>
+        <tbody>
+          {% for commande in commandes_recentes %}
+          <tr>
+            <td><strong>#{{ commande.id }}</strong></td>
+            <td>{{ commande.client.first_name|default:commande.client.username }}</td>
+            <td style="color:var(--texte-clair);">{{ commande.date_commande|date:"d/m/Y" }}</td>
+            <td style="color:var(--rose-fonce);font-weight:600;">{{ commande.montant_total }} MAD</td>
+            <td><span class="statut-badge statut-{{ commande.statut }}">{{ commande.get_statut_display }}</span></td>
+            <td><a href="{% url 'detail_commande_admin' commande.id %}" class="btn-admin btn-admin-secondary" style="padding:0.25rem 0.6rem;font-size:0.78rem;">Détail</a></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" style="text-align:center;color:var(--texte-clair);padding:2rem;">Aucune commande.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Sidebar stats -->
+  <div class="col-lg-4">
+    <!-- Top produits -->
+    <div class="admin-card mb-4">
+      <div class="admin-card-header"><h6 class="admin-card-title">Produits les plus vendus</h6></div>
+      <div class="admin-card-body">
+        {% for item in produits_vendus %}
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div style="flex:1;font-size:0.85rem;font-weight:600;">{{ item.produit__nom|truncatechars:26 }}</div>
+          <span style="color:var(--rose-fonce);font-weight:700;font-size:0.85rem;margin-left:0.5rem;">{{ item.total_vendu }}</span>
+        </div>
+        {% empty %}
+        <p style="color:var(--texte-clair);font-size:0.88rem;margin:0;">Aucune vente.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Statuts -->
+    <div class="admin-card">
+      <div class="admin-card-header"><h6 class="admin-card-title">Commandes par statut</h6></div>
+      <div class="admin-card-body">
+        <div class="d-flex justify-content-between mb-2"><span class="statut-badge statut-en_attente">En attente</span><strong>{{ statuts.en_attente|default:0 }}</strong></div>
+        <div class="d-flex justify-content-between mb-2"><span class="statut-badge statut-confirmee">Confirmée</span><strong>{{ statuts.confirmee|default:0 }}</strong></div>
+        <div class="d-flex justify-content-between mb-2"><span class="statut-badge statut-en_preparation">En préparation</span><strong>{{ statuts.en_preparation|default:0 }}</strong></div>
+        <div class="d-flex justify-content-between mb-2"><span class="statut-badge statut-expediee">Expédiée</span><strong>{{ statuts.expediee|default:0 }}</strong></div>
+        <div class="d-flex justify-content-between mb-2"><span class="statut-badge statut-livree">Livrée</span><strong>{{ statuts.livree|default:0 }}</strong></div>
+        <div class="d-flex justify-content-between"><span class="statut-badge statut-annulee">Annulée</span><strong>{{ statuts.annulee|default:0 }}</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

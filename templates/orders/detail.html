@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Commande #{{ commande.id }} — Glow.kr{% endblock %}
+{% block content %}
+<div class="container" style="padding-top:3rem; padding-bottom:4rem;">
+  <div class="d-flex align-items-center gap-3 mb-1">
+    <h1 class="section-title" style="margin:0;">Commande #{{ commande.id }}</h1>
+    <span class="statut-badge statut-{{ commande.statut }}">{{ commande.get_statut_display }}</span>
+  </div>
+  <div class="section-divider"></div>
+
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div style="background:var(--blanc); border-radius:var(--rayon-lg); overflow:hidden; box-shadow:0 4px 20px var(--ombre);">
+        <div style="padding:1.2rem; background:var(--gris-doux); font-weight:700; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px; color:var(--texte-clair);">
+          Articles commandés
+        </div>
+        <table class="table-dashboard">
+          <thead>
+            <tr>
+              <th>Produit</th>
+              <th>Prix unitaire</th>
+              <th>Quantité</th>
+              <th>Sous-total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ligne in commande.lignes.all %}
+            <tr>
+              <td>
+                <strong>{{ ligne.nom_produit }}</strong>
+                {% if ligne.produit %}
+                <br><a href="{% url 'detail_produit' ligne.produit.slug %}" style="font-size:0.8rem; color:var(--rose-fonce);">Voir le produit</a>
+                {% endif %}
+              </td>
+              <td>{{ ligne.prix_unitaire }} MAD</td>
+              <td>{{ ligne.quantite }}</td>
+              <td><strong>{{ ligne.sous_total }} MAD</strong></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-end p-3 gap-3">
+          <span style="font-weight:700; font-size:1.1rem;">Total :</span>
+          <span style="font-weight:700; font-size:1.3rem; color:var(--rose-fonce); font-family:'Playfair Display', serif;">{{ commande.montant_total }} MAD</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="form-card">
+        <h6 style="font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--texte-clair); margin-bottom:1rem; font-size:0.8rem;">
+          Informations de livraison
+        </h6>
+        <p style="font-size:0.9rem; margin-bottom:0.3rem;"><strong>Date :</strong> {{ commande.date_commande|date:"d/m/Y à H:i" }}</p>
+        <p style="font-size:0.9rem; margin-bottom:0.3rem;"><strong>Adresse :</strong> {{ commande.adresse_livraison }}</p>
+        <p style="font-size:0.9rem; margin-bottom:0.3rem;"><strong>Ville :</strong> {{ commande.ville_livraison }}, {{ commande.code_postal_livraison }}</p>
+        <p style="font-size:0.9rem; margin-bottom:0;"><strong>Pays :</strong> {{ commande.pays_livraison }}</p>
+        {% if commande.notes %}
+        <hr style="border-color:#f0eaf8;">
+        <p style="font-size:0.9rem;"><strong>Notes :</strong> {{ commande.notes }}</p>
+        {% endif %}
+      </div>
+      <div class="mt-3">
+        <a href="{% url 'historique_commandes' %}" class="btn-outline-rose d-block text-center">
+          Retour à mes commandes
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

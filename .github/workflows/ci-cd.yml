@@ -1,0 +1,114 @@
+name: CI/CD — Glow.kr K-Beauty Shop
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/glowkr-shop
+
+jobs:
+  # ============================================================
+  # JOB 1 : Tests et qualité du code
+  # ============================================================
+  test:
+    name: Tests & Qualité
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: kbeauty_user
+          POSTGRES_PASSWORD: kbeauty_password
+          POSTGRES_DB: kbeauty_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Récupération du code source
+        uses: actions/checkout@v4
+
+      - name: Installation de Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Installation des dépendances
+        run: pip install -r requirements.txt
+
+      - name: Configuration des variables d'environnement
+        run: |
+          echo "SECRET_KEY=ci-test-secret-key-not-for-production" >> .env
+          echo "DEBUG=True" >> .env
+          echo "DB_NAME=kbeauty_test" >> .env
+          echo "DB_USER=kbeauty_user" >> .env
+          echo "DB_PASSWORD=kbeauty_password" >> .env
+          echo "DB_HOST=localhost" >> .env
+          echo "DB_PORT=5432" >> .env
+          echo "USE_SQLITE=False" >> .env
+
+      - name: Lancement des migrations
+        run: python manage.py migrate
+
+      - name: Exécution des tests
+        run: python manage.py test --verbosity=2
+
+      - name: Vérification de la qualité du code (flake8)
+        run: |
+          pip install flake8
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --max-line-length=120 --statistics
+
+  # ============================================================
+  # JOB 2 : Construction et publication de l'image Docker
+  # ============================================================
+  docker:
+    name: Build & Push Docker
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Récupération du code source
+        uses: actions/checkout@v4
+
+      - name: Connexion à Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extraction des métadonnées Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_IMAGE }}
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix=sha-
+            type=raw,value=latest
+
+      - name: Construction et publication de l'image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Notification de succès
+        if: success()
+        run: echo "Image Docker publiée avec succès sur Docker Hub"
+
+      - name: Notification d'échec
+        if: failure()
+        run: echo "ECHEC de la pipeline CI/CD — vérifier les logs"

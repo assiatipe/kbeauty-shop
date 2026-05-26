@@ -1,0 +1,348 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ produit.nom }} — Glow.kr{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top:3rem; padding-bottom:4rem;">
+
+  <!-- Fil d'Ariane -->
+  <nav style="font-size:0.85rem; color:var(--texte-clair); margin-bottom:2rem;">
+    <a href="{% url 'home' %}">Accueil</a>
+    <span style="margin:0 0.5rem;">›</span>
+    <a href="{% url 'catalogue' %}">Produits</a>
+    <span style="margin:0 0.5rem;">›</span>
+    <a href="{% url 'catalogue' %}?categorie={{ produit.categorie.slug }}">{{ produit.categorie.nom }}</a>
+    <span style="margin:0 0.5rem;">›</span>
+    <span style="color:var(--texte);">{{ produit.nom }}</span>
+  </nav>
+
+  <!-- Détail produit -->
+  <div class="row g-5">
+
+    <!-- Image -->
+    <div class="col-lg-5">
+      <div class="detail-img-wrapper">
+        {% if produit.image %}
+        <img src="{{ produit.image.url }}" alt="{{ produit.nom }}">
+        {% else %}
+        <svg viewBox="0 0 400 400" width="100%" height="400" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="400" fill="var(--gris-doux)"/>
+          <ellipse cx="200" cy="300" rx="80" ry="22" fill="var(--lavande)" opacity="0.4"/>
+          <rect x="120" y="200" width="160" height="100" rx="20" fill="var(--blanc)" opacity="0.9"/>
+          <rect x="120" y="185" width="160" height="30" rx="15" fill="var(--lavande)" opacity="0.7"/>
+          <ellipse cx="200" cy="185" rx="80" ry="15" fill="var(--lavande-fonce)" opacity="0.5"/>
+          <text x="200" y="260" text-anchor="middle" font-size="16" fill="var(--texte-clair)" font-family="serif" font-style="italic">{{ produit.categorie.nom }}</text>
+          <circle cx="100" cy="120" r="6" fill="var(--rose)" opacity="0.6"/>
+          <circle cx="310" cy="140" r="5" fill="var(--mint)" opacity="0.6"/>
+          <circle cx="80" cy="280" r="4" fill="var(--peche)" opacity="0.5"/>
+          <circle cx="330" cy="300" r="7" fill="var(--lavande)" opacity="0.4"/>
+        </svg>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Infos produit -->
+    <div class="col-lg-7">
+      <div style="font-size:0.8rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--texte-clair); margin-bottom:0.5rem;">
+        {{ produit.categorie.nom }}
+      </div>
+
+      <h1 style="font-family:'Playfair Display', serif; font-size:2rem; margin-bottom:0.3rem;">
+        {{ produit.nom }}
+      </h1>
+
+      {% if produit.marque %}
+      <p style="color:var(--texte-clair); font-weight:600; margin-bottom:1rem;">
+        {{ produit.marque }}
+      </p>
+      {% endif %}
+
+      <!-- Notes -->
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <div>
+          {% for i in "12345" %}
+          <span style="font-size:1.1rem; color:{% if forloop.counter <= produit.note_moyenne %}#f5a623{% else %}#ddd{% endif %};">★</span>
+          {% endfor %}
+        </div>
+        <span style="font-weight:600; color:var(--texte);">{{ produit.note_moyenne }}/5</span>
+        <span style="color:var(--texte-clair);">({{ produit.nombre_avis }} avis)</span>
+      </div>
+
+      <!-- Prix -->
+      <div class="price-tag mb-3">{{ produit.prix }} MAD</div>
+
+      <!-- Stock -->
+      {% if produit.en_stock %}
+      <span style="background:var(--mint); color:#2d7a70; padding:0.3rem 1rem; border-radius:50px; font-size:0.8rem; font-weight:700;">
+        En stock ({{ produit.quantite_stock }} disponibles)
+      </span>
+      {% else %}
+      <span style="background:#fde0e0; color:#9a3030; padding:0.3rem 1rem; border-radius:50px; font-size:0.8rem; font-weight:700;">
+        Rupture de stock
+      </span>
+      {% endif %}
+
+      <!-- Infos rapides -->
+      <div class="row g-3 my-3">
+        {% if produit.contenance %}
+        <div class="col-auto">
+          <div style="background:var(--gris-doux); padding:0.5rem 1rem; border-radius:10px; font-size:0.85rem;">
+            <span style="color:var(--texte-clair);">Contenance :</span>
+            <strong> {{ produit.contenance }}</strong>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if produit.type_peau %}
+        <div class="col-auto">
+          <div style="background:var(--gris-doux); padding:0.5rem 1rem; border-radius:10px; font-size:0.85rem;">
+            <span style="color:var(--texte-clair);">Type de peau :</span>
+            <strong> {{ produit.type_peau }}</strong>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Description -->
+      <div style="margin:1.5rem 0; line-height:1.8; color:var(--texte);">
+        {{ produit.description|linebreaksbr }}
+      </div>
+
+      <!-- Ingrédients -->
+      {% if produit.ingredients %}
+      <details style="margin-bottom:1.5rem;">
+        <summary style="font-weight:700; cursor:pointer; color:var(--texte-clair); font-size:0.9rem;">
+          Ingrédients (INCI)
+        </summary>
+        <p style="margin-top:0.8rem; font-size:0.85rem; color:var(--texte-clair); line-height:1.8;">
+          {{ produit.ingredients }}
+        </p>
+      </details>
+      {% endif %}
+
+      <!-- Bouton ajouter au panier -->
+      {% if produit.en_stock %}
+        {% if user.is_authenticated %}
+        <form action="{% url 'ajouter_au_panier' produit.id %}" method="post" class="d-flex gap-3 align-items-center">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <button type="submit" class="btn-rose" style="padding:0.9rem 2.5rem; font-size:1rem;">
+            Ajouter au panier
+          </button>
+          <a href="{% url 'voir_panier' %}" class="btn-outline-rose" style="padding:0.9rem 1.5rem; font-size:1rem;">
+            Voir le panier
+          </a>
+        </form>
+        {% else %}
+        <div style="background:var(--gris-doux); border-radius:var(--rayon); padding:1.2rem;">
+          <p style="margin-bottom:0.5rem; color:var(--texte-clair); font-size:0.9rem;">
+            Connectez-vous pour ajouter au panier
+          </p>
+          <a href="{% url 'login' %}?next={{ request.get_full_path }}" class="btn-rose">
+            Se connecter
+          </a>
+        </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ===== AVIS CLIENTS ===== -->
+  <div style="margin-top:4rem;">
+    <h2 class="section-title mb-1">Avis clients</h2>
+    <div class="section-divider"></div>
+
+    <!-- Formulaire avis -->
+    {% if user.is_authenticated %}
+    <div class="form-card mb-4" style="max-width:600px;">
+      <h5 style="font-family:'Nunito', sans-serif; font-weight:700; margin-bottom:1.2rem;">
+        {{ user_avis|yesno:"Modifier mon avis,Laisser un avis" }}
+      </h5>
+
+      <form action="{% url 'ajouter_avis' produit.slug %}" method="post">
+        {% csrf_token %}
+
+        <!-- Sélecteur étoiles -->
+        <div class="mb-3">
+          <label class="form-label">Note</label>
+          <div class="d-flex gap-2" id="rating-stars">
+            {% for i in "12345" %}
+            <label style="cursor:pointer;">
+              <input
+                type="radio"
+                name="note"
+                value="{{ forloop.counter }}"
+                style="display:none;"
+                {% if user_avis and user_avis.note == forloop.counter %}checked{% endif %}
+              >
+              <span
+                class="rating-star"
+                data-value="{{ forloop.counter }}"
+                style="font-size:1.8rem; color:{% if user_avis and forloop.counter <= user_avis.note %}#f5a623{% else %}#ddd{% endif %};"
+                onmouseover="highlightStars({{ forloop.counter }})"
+                onmouseout="resetStars()"
+                onclick="selectStar({{ forloop.counter }})"
+              >
+                ★
+              </span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Commentaire</label>
+          <textarea name="commentaire" class="form-control" rows="3" placeholder="Partagez votre expérience avec ce produit...">{{ user_avis.commentaire|default:'' }}</textarea>
+        </div>
+
+        <div class="d-flex gap-2 align-items-center flex-wrap">
+          <button type="submit" class="btn-rose">
+            {{ user_avis|yesno:"Mettre à jour,Publier l'avis" }}
+          </button>
+
+          {% if user_avis %}
+          <button
+            type="submit"
+            formaction="{% url 'supprimer_avis' user_avis.id %}"
+            formmethod="post"
+            class="btn-outline-rose"
+            style="color:#e09090; border-color:#e09090;"
+            onclick="return confirm('Voulez-vous vraiment supprimer votre avis ?');"
+          >
+            Supprimer
+          </button>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+    {% else %}
+    <p style="color:var(--texte-clair); margin-bottom:2rem;">
+      <a href="{% url 'login' %}?next={{ request.get_full_path }}">Connectez-vous</a> pour laisser un avis.
+    </p>
+    {% endif %}
+
+    <!-- Liste des avis -->
+    {% if avis_list %}
+    <div style="max-width:700px;">
+      {% for avis in avis_list %}
+      <div class="avis-card">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div>
+            <strong style="font-size:0.95rem;">
+              {{ avis.auteur.first_name|default:avis.auteur.username }}
+            </strong>
+            <div>
+              {% for i in "12345" %}
+              <span style="font-size:0.9rem; color:{% if forloop.counter <= avis.note %}#f5a623{% else %}#ddd{% endif %};">★</span>
+              {% endfor %}
+            </div>
+          </div>
+          <span style="font-size:0.8rem; color:var(--texte-clair);">
+            {{ avis.date_creation|date:"d/m/Y" }}
+          </span>
+        </div>
+        <p style="margin:0; font-size:0.9rem; color:var(--texte);">
+          {{ avis.commentaire }}
+        </p>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p style="color:var(--texte-clair);">
+      Soyez le premier à donner votre avis sur ce produit.
+    </p>
+    {% endif %}
+  </div>
+
+  <!-- ===== RECOMMANDATIONS IA ===== -->
+  {% if recommendations %}
+  <div style="margin-top:4rem;">
+    <div class="d-flex align-items-center gap-3 mb-1">
+      <h2 class="section-title" style="margin:0;">Vous aimerez aussi</h2>
+      <span style="background:var(--lavande); color:var(--texte); padding:0.2rem 0.8rem; border-radius:50px; font-size:0.75rem; font-weight:700;">
+        IA
+      </span>
+    </div>
+
+    <p style="color:var(--texte-clair); font-size:0.85rem; margin-bottom:0.5rem;">
+      Recommandés par notre algorithme TF-IDF basé sur la similarité des produits
+    </p>
+
+    <div class="section-divider"></div>
+
+    <div class="row g-4">
+      {% for reco in recommendations %}
+      <div class="col-6 col-md-3">
+        <div class="product-card">
+          {% if reco.image %}
+          <img src="{{ reco.image.url }}" alt="{{ reco.nom }}" style="width:100%; height:180px; object-fit:cover;">
+          {% else %}
+          <div style="height:180px;">
+            {% include 'partials/product_placeholder.html' %}
+          </div>
+          {% endif %}
+
+          <div class="product-card-body">
+            <div class="product-card-categorie">{{ reco.categorie.nom }}</div>
+            <div class="product-card-nom">{{ reco.nom|truncatechars:35 }}</div>
+            <div class="product-card-prix">{{ reco.prix }} MAD</div>
+          </div>
+
+          <a href="{% url 'detail_produit' reco.slug %}" class="stretched-link"></a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let selectedRating = 0;
+
+document.addEventListener('DOMContentLoaded', function () {
+  const checkedInput = document.querySelector('input[name="note"]:checked');
+
+  if (checkedInput) {
+    selectedRating = parseInt(checkedInput.value);
+  }
+
+  resetStars();
+});
+
+function getRatingStars() {
+  return document.querySelectorAll('#rating-stars .rating-star');
+}
+
+function highlightStars(n) {
+  const labels = getRatingStars();
+
+  labels.forEach((star, index) => {
+    star.style.color = index < n ? '#f5a623' : '#ddd';
+  });
+}
+
+function resetStars() {
+  const labels = getRatingStars();
+
+  labels.forEach((star, index) => {
+    star.style.color = index < selectedRating ? '#f5a623' : '#ddd';
+  });
+}
+
+function selectStar(n) {
+  const inputs = document.querySelectorAll('input[name="note"]');
+
+  if (inputs[n - 1]) {
+    inputs[n - 1].checked = true;
+  }
+
+  selectedRating = n;
+  highlightStars(n);
+}
+</script>
+{% endblock %}

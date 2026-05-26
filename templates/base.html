@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Glow.kr — K-Beauty Skincare{% endblock %}</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    .container { max-width: 1200px; }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+
+    <!-- LOGO -->
+    <a class="navbar-brand" href="{% url 'home' %}" style="display:flex; align-items:center; padding:0;">
+      <svg viewBox="0 0 300 70" width="130" height="46" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="35" r="26" fill="#fde8f0" opacity="0.8"/>
+        <circle cx="30" cy="35" r="19" fill="#f7c5d8" opacity="0.6"/>
+
+        <ellipse cx="30" cy="50" rx="14" ry="4.5" fill="#e8a0c0" opacity="0.4"/>
+        <rect x="16" y="32" width="28" height="18" rx="7" fill="#fff0f8"/>
+        <rect x="16" y="25" width="28" height="11" rx="5.5" fill="#f0c0dc"/>
+        <ellipse cx="30" cy="25" rx="14" ry="5" fill="#e8a0c0"/>
+        <ellipse cx="24" cy="26.5" rx="6" ry="2.5" fill="rgba(255,255,255,0.5)"/>
+        <text x="30" y="45" text-anchor="middle" font-size="5" fill="#c070a0" font-family="Georgia,serif" font-style="italic">glow</text>
+
+        <g transform="translate(10,13)">
+          <circle cx="0" cy="-4" r="2.2" fill="#ffb8d0" opacity="0.9"/>
+          <circle cx="3.5" cy="-1" r="2.2" fill="#ffb8d0" opacity="0.9"/>
+          <circle cx="2" cy="3" r="2.2" fill="#ffb8d0" opacity="0.9"/>
+          <circle cx="-2" cy="3" r="2.2" fill="#ffb8d0" opacity="0.9"/>
+          <circle cx="-3.5" cy="-1" r="2.2" fill="#ffb8d0" opacity="0.9"/>
+          <circle cx="0" cy="0" r="3" fill="#ff8cb8"/>
+        </g>
+
+        <circle cx="52" cy="16" r="2.5" fill="#c8e8e0" opacity="0.8"/>
+        <circle cx="12" cy="52" r="2" fill="#d4b0f0" opacity="0.7"/>
+
+        <text x="65" y="48" font-size="34" font-weight="700" font-style="italic" fill="#3d2a50" font-family="Georgia,'Times New Roman',serif" letter-spacing="-1">Glow</text>
+        <circle cx="138" cy="43" r="4" fill="#e8709a"/>
+        <text x="146" y="48" font-size="34" font-weight="700" font-style="italic" fill="#e8709a" font-family="Georgia,'Times New Roman',serif" letter-spacing="-0.5">kr</text>
+      </svg>
+    </a>
+
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav me-auto ms-4 gap-1">
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">
+            Accueil
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'catalogue' %}active{% endif %}" href="{% url 'catalogue' %}">
+            Produits
+          </a>
+        </li>
+
+        {% if user.is_authenticated and user.is_staff %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'dashboard' %}" style="background:var(--lavande); color:var(--texte) !important; border-radius:20px;">
+            Admin
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+
+      <ul class="navbar-nav align-items-center gap-2">
+        <!-- Recherche -->
+        <li class="nav-item">
+          <form action="{% url 'catalogue' %}" method="get" class="d-flex">
+            <input
+              type="text"
+              name="q"
+              placeholder="Rechercher..."
+              class="form-control"
+              style="width:180px; border-radius:50px; font-size:0.85rem; padding:0.35rem 1rem;"
+            >
+          </form>
+        </li>
+
+        {% if user.is_authenticated %}
+        <!-- Panier -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'voir_panier' %}">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+
+            {% if cart_count > 0 %}
+            <span class="cart-badge">{{ cart_count }}</span>
+            {% endif %}
+          </a>
+        </li>
+
+        <!-- Profil -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'profil' %}">
+            {{ user.first_name|default:user.username }}
+          </a>
+        </li>
+
+        <!-- Déconnexion sécurisée en POST -->
+        <li class="nav-item">
+          <form method="post" action="{% url 'logout' %}" style="display:inline;">
+            {% csrf_token %}
+            <button
+              type="submit"
+              class="btn-outline-rose"
+              style="font-size:0.85rem; padding:0.35rem 1rem;"
+            >
+              Déconnexion
+            </button>
+          </form>
+        </li>
+
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'login' %}">
+            Connexion
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="btn-rose" href="{% url 'inscription' %}" style="font-size:0.85rem;">
+            Créer un compte
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== MESSAGES ===== -->
+{% if messages %}
+<div class="container mt-3">
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags|default:'info' }}" role="alert">
+    {{ message }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- ===== CONTENU PRINCIPAL ===== -->
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <svg viewBox="0 0 220 50" width="110" height="36" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:0.8rem;">
+          <circle cx="22" cy="25" r="19" fill="#fde8f0" opacity="0.2"/>
+          <circle cx="22" cy="25" r="14" fill="#f7c5d8" opacity="0.2"/>
+          <rect x="12" y="18" width="20" height="13" rx="5" fill="rgba(255,255,255,0.15)"/>
+          <rect x="12" y="13" width="20" height="8" rx="4" fill="rgba(255,255,255,0.2)"/>
+          <ellipse cx="22" cy="13" rx="10" ry="4" fill="rgba(255,255,255,0.15)"/>
+          <text x="48" y="34" font-size="26" font-weight="700" font-style="italic" fill="white" font-family="Georgia,serif" opacity="0.9">Glow</text>
+          <circle cx="101" cy="30" r="3" fill="#e8709a" opacity="0.8"/>
+          <text x="107" y="34" font-size="26" font-weight="700" font-style="italic" fill="#e8a0c0" font-family="Georgia,serif">kr</text>
+        </svg>
+
+        <p style="font-size:0.9rem; line-height:1.8;">
+          Votre destination K-Beauty. Des soins coréens authentiques,
+          sélectionnés avec soin pour révéler l'éclat naturel de votre peau.
+        </p>
+      </div>
+
+      <div class="col-lg-2">
+        <h5>Boutique</h5>
+        <ul class="list-unstyled" style="font-size:0.9rem;">
+          <li class="mb-2"><a href="{% url 'catalogue' %}">Tous les produits</a></li>
+          <li class="mb-2"><a href="{% url 'catalogue' %}?tri=date">Nouveautés</a></li>
+          <li class="mb-2"><a href="{% url 'catalogue' %}?tri=note">Mieux notés</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-2">
+        <h5>Mon compte</h5>
+        <ul class="list-unstyled" style="font-size:0.9rem;">
+          {% if user.is_authenticated %}
+          <li class="mb-2"><a href="{% url 'profil' %}">Mon profil</a></li>
+          <li class="mb-2"><a href="{% url 'historique_commandes' %}">Mes commandes</a></li>
+          <li class="mb-2"><a href="{% url 'voir_panier' %}">Mon panier</a></li>
+          {% else %}
+          <li class="mb-2"><a href="{% url 'login' %}">Connexion</a></li>
+          <li class="mb-2"><a href="{% url 'inscription' %}">Inscription</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <div class="col-lg-4">
+        <h5>K-Beauty Routine</h5>
+        <p style="font-size:0.9rem;">
+          La routine 10 étapes coréenne pour une peau éclatante : nettoyage, essence, sérum, crème...
+        </p>
+
+        <a href="{% url 'chatbot' %}" style="display:inline-flex; align-items:center; gap:0.5rem; background:rgba(255,255,255,0.1); padding:0.5rem 1rem; border-radius:50px; font-size:0.85rem; color:rgba(255,255,255,0.8); margin-top:0.5rem;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+          </svg>
+          Assistante K-Beauty
+        </a>
+      </div>
+    </div>
+
+    <hr style="border-color: rgba(255,255,255,0.1); margin: 2rem 0 1.5rem;">
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <p style="font-size:0.8rem; margin:0;">
+        © 2025 Glow.kr — Plateforme e-commerce K-Beauty. Projet EMI.
+      </p>
+      <p style="font-size:0.8rem; margin:0; color:rgba(255,255,255,0.4);">
+        Développé avec Django
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Bouton chatbot flottant -->
+<a
+  href="{% url 'chatbot' %}"
+  style="position:fixed;bottom:2rem;right:2rem;z-index:999;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--rose-fonce),var(--lavande-fonce));box-shadow:0 4px 20px rgba(180,100,150,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;"
+  onmouseover="this.style.transform='scale(1.1)'"
+  onmouseout="this.style.transform='scale(1)'"
+  title="Assistante K-Beauty"
+>
+  <svg viewBox="0 0 24 24" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="9" cy="10" r="1" fill="white"/>
+    <circle cx="12" cy="10" r="1" fill="white"/>
+    <circle cx="15" cy="10" r="1" fill="white"/>
+  </svg>
+</a>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

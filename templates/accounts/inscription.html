@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Créer un compte — Glow.kr{% endblock %}
+{% block content %}
+<div class="container" style="padding-top:4rem; padding-bottom:4rem;">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="text-center mb-4">
+        <h1 class="section-title">Rejoindre Glow.kr</h1>
+        <p style="color:var(--texte-clair);">Créez votre compte et commencez votre routine K-Beauty</p>
+      </div>
+      <div class="form-card">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-6">
+              <label class="form-label">Prénom</label>
+              {{ form.first_name }}
+            </div>
+            <div class="col-6">
+              <label class="form-label">Nom</label>
+              {{ form.last_name }}
+            </div>
+          </div>
+          <div class="mt-3">
+            <label class="form-label">Nom d'utilisateur</label>
+            {{ form.username }}
+          </div>
+          <div class="mt-3">
+            <label class="form-label">Email</label>
+            {{ form.email }}
+          </div>
+          <div class="mt-3">
+            <label class="form-label">Mot de passe</label>
+            {{ form.password1 }}
+          </div>
+          <div class="mt-3 mb-4">
+            <label class="form-label">Confirmer le mot de passe</label>
+            {{ form.password2 }}
+          </div>
+          {% if form.errors %}
+          <div class="alert alert-error mb-3">
+            {% for field in form %}{% for error in field.errors %}<div>{{ error }}</div>{% endfor %}{% endfor %}
+            {% for error in form.non_field_errors %}<div>{{ error }}</div>{% endfor %}
+          </div>
+          {% endif %}
+          <button type="submit" class="btn-rose" style="width:100%; padding:0.9rem; font-size:1rem;">
+            Créer mon compte
+          </button>
+        </form>
+        <p class="text-center mt-3" style="font-size:0.9rem; color:var(--texte-clair);">
+          Déjà un compte ? <a href="{% url 'login' %}" style="color:var(--rose-fonce); font-weight:700;">Se connecter</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

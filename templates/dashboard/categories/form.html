@@ -1,0 +1,38 @@
+{% extends 'dashboard/base_admin.html' %}
+{% block title %}{{ titre }} — Admin{% endblock %}
+{% block page_title %}{{ titre }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <h6 class="admin-card-title">{{ titre }}</h6>
+        <a href="{% url 'liste_categories' %}" class="btn-admin btn-admin-secondary">← Retour</a>
+      </div>
+      <div class="admin-card-body">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-md-7">
+              <label class="admin-form-label">Nom *</label>
+              {{ form.nom }}
+            </div>
+            <div class="col-md-5">
+              <label class="admin-form-label">Slug</label>
+              {{ form.slug }}
+            </div>
+            <div class="col-12">
+              <label class="admin-form-label">Description</label>
+              {{ form.description }}
+            </div>
+          </div>
+          <div class="d-flex gap-3 mt-4">
+            <button type="submit" class="btn-admin btn-admin-primary" style="padding:0.7rem 2rem;">Enregistrer</button>
+            <a href="{% url 'liste_categories' %}" class="btn-admin btn-admin-secondary" style="padding:0.7rem 1.5rem;">Annuler</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Admin — Glow.kr{% endblock %}</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <style>
+    :root {
+      --admin-sidebar: #2d2540;
+      --admin-sidebar-hover: #3d3358;
+      --admin-accent: #c87fa0;
+      --admin-bg: #f7f4fc;
+    }
+
+    body {
+      background: var(--admin-bg);
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .admin-wrapper {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .admin-sidebar {
+      width: 240px;
+      background: var(--admin-sidebar);
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-brand {
+      padding: 1.5rem 1.5rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .sidebar-brand-title {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: white;
+      font-size: 1.4rem;
+    }
+
+    .sidebar-brand-title span {
+      color: var(--admin-accent);
+    }
+
+    .sidebar-brand-sub {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 2px;
+    }
+
+    .sidebar-nav {
+      padding: 1rem 0;
+      flex: 1;
+    }
+
+    .sidebar-section {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: rgba(255,255,255,0.3);
+      padding: 1rem 1.5rem 0.4rem;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.65rem 1.5rem;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      text-decoration: none;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-link:hover,
+    .sidebar-link.active {
+      background: var(--admin-sidebar-hover);
+      color: white;
+      border-left-color: var(--admin-accent);
+    }
+
+    .sidebar-link svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .sidebar-footer a {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.82rem;
+      display: block;
+      margin-bottom: 0.4rem;
+      text-decoration: none;
+    }
+
+    .sidebar-footer a:hover {
+      color: white;
+    }
+
+    .sidebar-logout-form {
+      margin: 0;
+    }
+
+    .sidebar-logout-btn {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.82rem;
+      display: block;
+      margin-bottom: 0.4rem;
+      padding: 0;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      font-family: inherit;
+    }
+
+    .sidebar-logout-btn:hover {
+      color: white;
+    }
+
+    .admin-main {
+      margin-left: 240px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .admin-topbar {
+      background: white;
+      padding: 0.9rem 2rem;
+      border-bottom: 1px solid #ede8f5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 2px 10px rgba(180,150,200,0.08);
+    }
+
+    .admin-topbar-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--texte);
+    }
+
+    .admin-topbar-user {
+      font-size: 0.85rem;
+      color: var(--texte-clair);
+    }
+
+    .admin-content {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    .admin-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(180,150,200,0.1);
+      overflow: hidden;
+    }
+
+    .admin-card-header {
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid #f0eaf8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-card-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--texte);
+      margin: 0;
+    }
+
+    .admin-card-body {
+      padding: 1.5rem;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .admin-table th {
+      background: #faf7ff;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--texte-clair);
+      font-weight: 700;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .admin-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid #f5f0fc;
+      font-size: 0.88rem;
+      vertical-align: middle;
+    }
+
+    .admin-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .admin-table tr:hover td {
+      background: #fdf9ff;
+    }
+
+    .btn-admin {
+      padding: 0.45rem 1rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+    }
+
+    .btn-admin-primary {
+      background: var(--rose-fonce);
+      color: white;
+    }
+
+    .btn-admin-primary:hover {
+      background: #d4839a;
+      color: white;
+    }
+
+    .btn-admin-secondary {
+      background: var(--gris-doux);
+      color: var(--texte);
+    }
+
+    .btn-admin-secondary:hover {
+      background: #e8e0f0;
+      color: var(--texte);
+    }
+
+    .btn-admin-danger {
+      background: #fde0e0;
+      color: #9a3030;
+    }
+
+    .btn-admin-danger:hover {
+      background: #f5c0c0;
+      color: #7a2020;
+    }
+
+    .btn-admin-success {
+      background: var(--mint);
+      color: #2d7a70;
+    }
+
+    .btn-admin-success:hover {
+      background: var(--mint-fonce);
+      color: white;
+    }
+
+    .admin-form-control {
+      width: 100%;
+      border: 2px solid #e8e0f0;
+      border-radius: 10px;
+      padding: 0.6rem 0.9rem;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.9rem;
+      color: var(--texte);
+      background: white;
+      transition: border-color 0.2s;
+    }
+
+    .admin-form-control:focus {
+      border-color: var(--rose-fonce);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(232,160,180,0.15);
+    }
+
+    .admin-form-label {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--texte-clair);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+
+    .statut-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .statut-en_attente {
+      background: var(--peche);
+      color: #9a6030;
+    }
+
+    .statut-confirmee {
+      background: var(--mint);
+      color: #2d7a70;
+    }
+
+    .statut-en_preparation {
+      background: var(--lavande);
+      color: #4a3078;
+    }
+
+    .statut-expediee {
+      background: #c5d8f0;
+      color: #2a4a7a;
+    }
+
+    .statut-livree {
+      background: #c5f0d8;
+      color: #1a6040;
+    }
+
+    .statut-annulee {
+      background: #f0c5c5;
+      color: #7a2a2a;
+    }
+
+    .admin-alert {
+      padding: 0.8rem 1.2rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .admin-alert-success {
+      background: var(--mint);
+      color: #2d7a70;
+    }
+
+    .admin-alert-error {
+      background: #fde0e0;
+      color: #9a3030;
+    }
+
+    .admin-alert-info {
+      background: var(--lavande);
+      color: #4a3078;
+    }
+  </style>
+</head>
+
+<body>
+<div class="admin-wrapper">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-title">Glow<span>.kr</span></div>
+      <div class="sidebar-brand-sub">Administration</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">Vue d'ensemble</div>
+
+      <a href="{% url 'dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        Dashboard
+      </a>
+
+      <div class="sidebar-section">Catalogue</div>
+
+      <a href="{% url 'liste_produits' %}" class="sidebar-link {% if 'produit' in request.resolver_match.url_name %}active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/>
+          <line x1="7" y1="7" x2="7.01" y2="7"/>
+        </svg>
+        Produits
+      </a>
+
+      <a href="{% url 'liste_categories' %}" class="sidebar-link {% if 'categorie' in request.resolver_match.url_name %}active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 6h16M4 12h8m-8 6h16"/>
+        </svg>
+        Catégories
+      </a>
+
+      <a href="{% url 'gestion_stocks' %}" class="sidebar-link {% if request.resolver_match.url_name == 'gestion_stocks' %}active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2l10 6.5v7L12 22 2 15.5v-7L12 2z"/>
+        </svg>
+        Stocks
+      </a>
+
+      <div class="sidebar-section">Ventes</div>
+
+      <a href="{% url 'gestion_commandes' %}" class="sidebar-link {% if 'commande' in request.resolver_match.url_name %}active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+        </svg>
+        Commandes
+      </a>
+
+      <a href="{% url 'gestion_clients' %}" class="sidebar-link {% if request.resolver_match.url_name == 'gestion_clients' %}active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+          <path d="M16 3.13a4 4 0 010 7.75"/>
+        </svg>
+        Clients
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="{% url 'home' %}" target="_blank">Voir la boutique</a>
+      <a href="/admin/">Admin Django</a>
+
+      <form method="post" action="{% url 'logout' %}" class="sidebar-logout-form">
+        {% csrf_token %}
+        <button type="submit" class="sidebar-logout-btn">
+          Déconnexion
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div class="admin-topbar-title">
+        {% block page_title %}Dashboard{% endblock %}
+      </div>
+
+      <div class="admin-topbar-user">
+        Connecté en tant que <strong>{{ request.user.first_name|default:request.user.username }}</strong>
+      </div>
+    </div>
+
+    <div class="admin-content">
+      {% if messages %}
+        {% for message in messages %}
+        <div class="admin-alert admin-alert-{{ message.tags|default:'info' }}">
+          {{ message }}
+        </div>
+        {% endfor %}
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

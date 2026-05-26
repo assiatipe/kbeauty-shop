@@ -1,0 +1,1010 @@
+/* ============================================
+   GLOW.KR - K-Beauty Shop
+   Palette pastel douce, inspirée du skincare coréen
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --rose:        #f7c5d0;
+  --rose-fonce:  #e8a0b4;
+  --lavande:     #d4c5f0;
+  --lavande-fonce:#b8a8e0;
+  --mint:        #c5e8e0;
+  --mint-fonce:  #9dd4c8;
+  --peche:       #fde0c8;
+  --creme:       #fdf8f2;
+  --blanc:       #ffffff;
+  --gris-doux:   #f5f0f8;
+  --texte:       #4a3f5c;
+  --texte-clair: #8b7fa8;
+  --ombre:       rgba(180, 150, 200, 0.15);
+  --ombre-hover: rgba(180, 150, 200, 0.30);
+  --rayon:       16px;
+  --rayon-lg:    24px;
+  --transition:  0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset & base */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background-color: var(--creme);
+  color: var(--texte);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 600; }
+a { color: var(--texte); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--rose-fonce); }
+img { max-width: 100%; height: auto; display: block; }
+
+/* ============================================
+   NAVBAR
+   ============================================ */
+.navbar {
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 2px solid var(--rose);
+  padding: 0.75rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 20px var(--ombre);
+}
+
+.navbar-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-style: italic;
+  color: var(--texte) !important;
+  letter-spacing: -0.5px;
+}
+
+.navbar-brand span { color: var(--rose-fonce); }
+
+.nav-link {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--texte) !important;
+  letter-spacing: 0.3px;
+  padding: 0.4rem 0.8rem !important;
+  border-radius: 20px;
+  transition: all var(--transition);
+}
+
+.nav-link:hover, .nav-link.active {
+  background: var(--rose);
+  color: var(--texte) !important;
+}
+
+.cart-badge {
+  background: var(--rose-fonce);
+  color: white;
+  font-size: 0.7rem;
+  padding: 1px 6px;
+  border-radius: 50px;
+  margin-left: 4px;
+  font-weight: 700;
+}
+
+/* ============================================
+   BOUTONS
+   ============================================ */
+.btn-rose {
+  background: var(--rose-fonce);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.6rem;
+  border-radius: 50px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: inline-block;
+  letter-spacing: 0.3px;
+}
+
+.btn-rose:hover {
+  background: #d4839a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(232,160,180,0.4);
+  color: white;
+}
+
+.btn-outline-rose {
+  background: transparent;
+  color: var(--rose-fonce);
+  border: 2px solid var(--rose-fonce);
+  padding: 0.5rem 1.4rem;
+  border-radius: 50px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: inline-block;
+}
+
+.btn-outline-rose:hover {
+  background: var(--rose-fonce);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-mint {
+  background: var(--mint-fonce);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.6rem;
+  border-radius: 50px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: inline-block;
+}
+
+.btn-mint:hover {
+  background: #7abfb5;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(157,212,200,0.4);
+  color: white;
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.hero {
+  background: linear-gradient(135deg, var(--rose) 0%, var(--lavande) 50%, var(--mint) 100%);
+  padding: 5rem 0 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 300px; height: 300px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 50%;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: -40px;
+  width: 250px; height: 250px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+}
+
+.hero-title {
+  font-size: 3.2rem;
+  line-height: 1.2;
+  color: var(--texte);
+  margin-bottom: 1.2rem;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  color: var(--texte-clair);
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+/* ============================================
+   CARTES PRODUITS
+   ============================================ */
+.product-card {
+  background: var(--blanc);
+  border-radius: var(--rayon-lg);
+  overflow: hidden;
+  transition: all var(--transition);
+  border: 2px solid transparent;
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px var(--ombre-hover);
+  border-color: var(--rose);
+}
+
+.product-card-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  background: var(--gris-doux);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-card-img svg { opacity: 0.5; }
+
+.product-card-body {
+  padding: 1.2rem;
+}
+
+.product-card-categorie {
+  font-size: 0.75rem;
+  color: var(--texte-clair);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 0.4rem;
+}
+
+.product-card-nom {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+  color: var(--texte);
+}
+
+.product-card-marque {
+  font-size: 0.8rem;
+  color: var(--texte-clair);
+  margin-bottom: 0.6rem;
+}
+
+.product-card-prix {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--rose-fonce);
+}
+
+.badge-new {
+  position: absolute;
+  top: 12px; left: 12px;
+  background: var(--lavande-fonce);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 50px;
+  letter-spacing: 0.5px;
+}
+
+.badge-rupture {
+  position: absolute;
+  top: 12px; right: 12px;
+  background: #e0a0a0;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 50px;
+}
+
+/* Etoiles */
+.stars { color: #f5a623; font-size: 0.9rem; }
+.stars-empty { color: #ddd; }
+
+/* ============================================
+   SECTIONS GENERIQUES
+   ============================================ */
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: var(--texte);
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  color: var(--texte-clair);
+  font-size: 0.95rem;
+  margin-bottom: 2.5rem;
+}
+
+.section-divider {
+  width: 60px;
+  height: 3px;
+  background: var(--rose-fonce);
+  border-radius: 10px;
+  margin: 0.6rem 0 1.5rem;
+}
+
+/* ============================================
+   CATEGORIES CARDS
+   ============================================ */
+.categorie-card {
+  background: var(--blanc);
+  border-radius: var(--rayon);
+  padding: 1.5rem;
+  text-align: center;
+  transition: all var(--transition);
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.categorie-card:hover {
+  border-color: var(--lavande-fonce);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px var(--ombre);
+}
+
+.categorie-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 1rem;
+}
+
+/* ============================================
+   FILTRES CATALOGUE
+   ============================================ */
+.filtres-sidebar {
+  background: var(--blanc);
+  border-radius: var(--rayon-lg);
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px var(--ombre);
+  position: sticky;
+  top: 80px;
+}
+
+.filtres-titre {
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--texte-clair);
+  margin-bottom: 1rem;
+}
+
+.filtre-tag {
+  display: inline-block;
+  background: var(--gris-doux);
+  color: var(--texte);
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0.2rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  border: 2px solid transparent;
+}
+
+.filtre-tag:hover, .filtre-tag.active {
+  background: var(--rose);
+  border-color: var(--rose-fonce);
+}
+
+/* ============================================
+   PANIER
+   ============================================ */
+.panier-ligne {
+  background: var(--blanc);
+  border-radius: var(--rayon);
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 12px var(--ombre);
+}
+
+.panier-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: var(--gris-doux);
+  flex-shrink: 0;
+}
+
+.qty-input {
+  width: 60px;
+  text-align: center;
+  border: 2px solid var(--rose);
+  border-radius: 8px;
+  padding: 0.3rem;
+  font-weight: 700;
+  color: var(--texte);
+  background: var(--creme);
+}
+
+.panier-total-card {
+  background: linear-gradient(135deg, var(--rose), var(--lavande));
+  border-radius: var(--rayon-lg);
+  padding: 1.8rem;
+}
+
+/* ============================================
+   FORMULAIRES
+   ============================================ */
+.form-card {
+  background: var(--blanc);
+  border-radius: var(--rayon-lg);
+  padding: 2.5rem;
+  box-shadow: 0 8px 30px var(--ombre);
+}
+
+.form-control {
+  border: 2px solid #e8e0f0;
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.95rem;
+  color: var(--texte);
+  background: var(--creme);
+  transition: border-color var(--transition);
+  width: 100%;
+}
+
+.form-control:focus {
+  border-color: var(--rose-fonce);
+  outline: none;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(232,160,180,0.15);
+}
+
+.form-label {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--texte-clair);
+  margin-bottom: 0.4rem;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================
+   ALERTS / MESSAGES
+   ============================================ */
+.alert {
+  border-radius: var(--rayon);
+  padding: 0.9rem 1.4rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  margin-bottom: 1rem;
+}
+
+.alert-success { background: var(--mint); color: #2d7a70; }
+.alert-error   { background: #fde0e0; color: #9a3030; }
+.alert-info    { background: var(--lavande); color: #4a3078; }
+.alert-warning { background: var(--peche); color: #9a6030; }
+
+/* ============================================
+   DASHBOARD
+   ============================================ */
+.stat-card {
+  background: var(--blanc);
+  border-radius: var(--rayon-lg);
+  padding: 1.8rem;
+  box-shadow: 0 4px 20px var(--ombre);
+  border-left: 4px solid var(--rose-fonce);
+  transition: transform var(--transition);
+}
+
+.stat-card:hover { transform: translateY(-3px); }
+.stat-card.mint  { border-left-color: var(--mint-fonce); }
+.stat-card.lavande { border-left-color: var(--lavande-fonce); }
+.stat-card.peche  { border-left-color: #e8c0a0; }
+
+.stat-valeur {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--texte);
+  font-family: 'Playfair Display', serif;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--texte-clair);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 600;
+}
+
+.table-dashboard {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-dashboard th {
+  background: var(--gris-doux);
+  padding: 0.8rem 1rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--texte-clair);
+  font-weight: 700;
+  text-align: left;
+}
+
+.table-dashboard td {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid #f0eaf8;
+  font-size: 0.9rem;
+}
+
+.table-dashboard tr:last-child td { border-bottom: none; }
+.table-dashboard tr:hover td { background: var(--gris-doux); }
+
+/* ============================================
+   BADGES STATUTS
+   ============================================ */
+.statut-badge {
+  padding: 0.3rem 0.9rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.statut-en_attente    { background: var(--peche); color: #9a6030; }
+.statut-confirmee     { background: var(--mint); color: #2d7a70; }
+.statut-en_preparation { background: var(--lavande); color: #4a3078; }
+.statut-expediee      { background: #c5d8f0; color: #2a4a7a; }
+.statut-livree        { background: #c5f0d8; color: #1a6040; }
+.statut-annulee       { background: #f0c5c5; color: #7a2a2a; }
+
+/* ============================================
+   DETAIL PRODUIT
+   ============================================ */
+.detail-img-wrapper {
+  background: var(--gris-doux);
+  border-radius: var(--rayon-lg);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.detail-img-wrapper img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+}
+
+.price-tag {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--rose-fonce);
+  font-family: 'Playfair Display', serif;
+}
+
+.avis-card {
+  background: var(--blanc);
+  border-radius: var(--rayon);
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+  border-left: 3px solid var(--rose);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+  background: var(--texte);
+  color: rgba(255,255,255,0.8);
+  padding: 3rem 0 1.5rem;
+  margin-top: 5rem;
+}
+
+footer h5 {
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+footer a { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
+footer a:hover { color: var(--rose); }
+footer .footer-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: white;
+  font-style: italic;
+}
+
+/* ============================================
+   UTILITAIRES
+   ============================================ */
+.text-rose   { color: var(--rose-fonce) !important; }
+.text-muted-custom { color: var(--texte-clair) !important; }
+.bg-pastel   { background: var(--gris-doux); }
+.mt-section  { margin-top: 5rem; }
+.mb-section  { margin-bottom: 5rem; }
+
+/* Spinners de chargement */
+.page-loader {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .hero-title { font-size: 2rem; }
+  .product-card-img { height: 180px; }
+  .filtres-sidebar { position: static; margin-bottom: 1.5rem; }
+  .panier-ligne { flex-wrap: wrap; }
+}
+/* =========================================================
+   HERO PREMIUM — BACKGROUND FINAL
+========================================================= */
+
+.hero-cover {
+  position: relative;
+  min-height: 560px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(248, 238, 248, 1) 0%,
+      rgba(248, 238, 248, 1) 28%,
+      rgba(248, 238, 248, 0.97) 42%,
+      rgba(248, 238, 248, 0.78) 56%,
+      rgba(248, 238, 248, 0.20) 76%,
+      rgba(248, 238, 248, 0.00) 100%
+    ),
+    url("/static/images/hero/hero-kbeauty-scene.png");
+
+  background-size: auto 68%;
+  background-position: right center;
+  background-repeat: no-repeat;
+  background-color: #f8eef8;
+}
+
+.hero-cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 16% 20%, rgba(255, 210, 230, 0.35), transparent 32%),
+    radial-gradient(circle at 48% 20%, rgba(215, 195, 255, 0.18), transparent 38%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-cover .container {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-cover-content {
+  max-width: 600px;
+  padding: 3.2rem 0;
+  position: relative;
+  z-index: 3;
+}
+
+.hero-cover-kicker {
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--texte-clair);
+  margin-bottom: 0.9rem;
+}
+
+.hero-cover-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 3.75rem;
+  line-height: 1.04;
+  color: var(--texte);
+  margin-bottom: 1.1rem;
+}
+
+.hero-cover-title em {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.hero-cover-subtitle {
+  color: var(--texte-clair);
+  font-size: 0.98rem;
+  line-height: 1.8;
+  max-width: 540px;
+  margin-bottom: 1.8rem;
+}
+
+.hero-cover-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.8rem;
+}
+
+.hero-cover-actions .btn-rose,
+.hero-cover-actions .btn-outline-rose {
+  padding: 0.85rem 2.1rem !important;
+  font-size: 0.93rem !important;
+}
+
+.hero-cover-stats {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.hero-cover-stat strong {
+  display: block;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--texte);
+}
+
+.hero-cover-stat span {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--texte-clair);
+  font-weight: 700;
+  margin-top: 0.35rem;
+}
+
+/* =========================================================
+   MARQUES — STYLE MODÈLE
+========================================================= */
+
+.brands-strip {
+  background: #fff;
+  padding: 2rem 0 1.9rem;
+  border-bottom: 1px solid #eee8f5;
+}
+
+.brands-title {
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--texte-clair);
+  margin-bottom: 1.4rem;
+}
+
+.brands-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.brand-logo {
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #1f1b2e;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+.brand-serif {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+}
+
+/* =========================================================
+   CATÉGORIES — STYLE MODÈLE
+========================================================= */
+
+.categories-model-section {
+  background: #fff;
+  padding: 3.8rem 0 4.2rem;
+}
+
+.section-kicker {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--texte-clair);
+  margin-bottom: 0.4rem;
+}
+
+.categories-model-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 2.2rem;
+  column-gap: 3.5rem;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.category-model-card {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+}
+
+.category-model-card:hover {
+  transform: translateY(-4px);
+}
+
+.category-icon-wrap {
+  width: 58px !important;
+  height: 58px !important;
+  min-width: 58px !important;
+  max-width: 58px !important;
+  min-height: 58px !important;
+  max-height: 58px !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+}
+
+.category-svg {
+  width: 58px !important;
+  height: 58px !important;
+  min-width: 58px !important;
+  max-width: 58px !important;
+  min-height: 58px !important;
+  max-height: 58px !important;
+  display: block !important;
+}
+
+/* Sécurité si un ancien SVG est encore utilisé */
+.categories-model-section svg,
+.category-model-card svg {
+  width: 58px !important;
+  height: 58px !important;
+  max-width: 58px !important;
+  max-height: 58px !important;
+}
+
+.category-model-info h3 {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--texte);
+  margin: 0 0 0.15rem;
+}
+
+.category-model-info p {
+  font-size: 0.82rem;
+  color: var(--texte-clair);
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Anciennes catégories : on limite aussi les SVG pour éviter les icônes géantes */
+.categorie-card svg {
+  width: 70px !important;
+  height: 70px !important;
+  max-width: 70px !important;
+  max-height: 70px !important;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+  .hero-cover {
+    min-height: 540px;
+    background-size: auto 62%;
+    background-position: right center;
+  }
+
+  .hero-cover-title {
+    font-size: 3.4rem;
+  }
+
+  .categories-model-grid {
+    column-gap: 2.5rem;
+  }
+}
+
+@media (max-width: 991px) {
+  .hero-cover {
+    min-height: auto;
+    text-align: center;
+    padding-bottom: 17rem;
+
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(248, 238, 248, 1) 0%,
+        rgba(248, 238, 248, 0.96) 45%,
+        rgba(248, 238, 248, 0.72) 100%
+      ),
+      url("/static/images/hero/hero-kbeauty-scene.png");
+
+    background-size: auto 300px;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+  }
+
+  .hero-cover-content {
+    max-width: 100%;
+    padding: 3rem 0 1rem;
+  }
+
+  .hero-cover-title {
+    font-size: 3rem;
+  }
+
+  .hero-cover-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-cover-actions,
+  .hero-cover-stats {
+    justify-content: center;
+  }
+
+  .brands-row {
+    justify-content: center;
+  }
+
+  .brand-logo {
+    font-size: 1.35rem;
+  }
+
+  .categories-model-grid {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-cover {
+    padding-bottom: 12rem;
+    background-size: auto 230px;
+  }
+
+  .hero-cover-title {
+    font-size: 2.35rem;
+  }
+
+  .hero-cover-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .hero-cover-actions .btn-rose,
+  .hero-cover-actions .btn-outline-rose {
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero-cover-stats {
+    gap: 1.2rem;
+    justify-content: center;
+  }
+
+  .hero-cover-stat strong {
+    font-size: 1.4rem;
+  }
+
+  .hero-cover-stat span {
+    font-size: 0.72rem;
+  }
+
+  .brands-row {
+    gap: 1.2rem;
+  }
+
+  .brand-logo {
+    font-size: 1.15rem;
+  }
+
+  .categories-model-grid {
+    grid-template-columns: 1fr;
+    row-gap: 1.5rem;
+  }
+}

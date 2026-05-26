@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Connexion — Glow.kr{% endblock %}
+{% block content %}
+<div class="container" style="padding-top:5rem; padding-bottom:5rem;">
+  <div class="row justify-content-center">
+    <div class="col-md-5 col-lg-4">
+      <div class="text-center mb-4">
+        <div style="font-family:'Playfair Display',serif; font-size:2.2rem; font-style:italic; margin-bottom:0.5rem;">
+          Glow<span style="color:var(--rose-fonce);">.kr</span>
+        </div>
+        <h2 class="section-title" style="font-size:1.5rem;">Bon retour</h2>
+        <p style="color:var(--texte-clair); font-size:0.9rem;">Connectez-vous à votre compte</p>
+      </div>
+      <div class="form-card">
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label">Nom d'utilisateur</label>
+            {{ form.username }}
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Mot de passe</label>
+            {{ form.password }}
+          </div>
+          {% if form.errors %}
+          <div class="alert alert-error mb-3">Identifiants incorrects. Veuillez réessayer.</div>
+          {% endif %}
+          <button type="submit" class="btn-rose" style="width:100%; padding:0.9rem; font-size:1rem;">
+            Se connecter
+          </button>
+        </form>
+        <p class="text-center mt-3" style="font-size:0.9rem; color:var(--texte-clair);">
+          Pas encore de compte ? <a href="{% url 'inscription' %}" style="color:var(--rose-fonce); font-weight:700;">Créer un compte</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

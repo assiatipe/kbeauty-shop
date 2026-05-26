@@ -1,0 +1,80 @@
+{% extends 'dashboard/base_admin.html' %}
+{% block title %}Commande #{{ commande.id }} — Admin{% endblock %}
+{% block page_title %}Commande #{{ commande.id }}{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="admin-card mb-4">
+      <div class="admin-card-header">
+        <h6 class="admin-card-title">Articles commandés</h6>
+        <span class="statut-badge statut-{{ commande.statut }}">{{ commande.get_statut_display }}</span>
+      </div>
+      <table class="admin-table">
+        <thead><tr><th>Produit</th><th>Prix unitaire</th><th>Qté</th><th>Sous-total</th></tr></thead>
+        <tbody>
+          {% for ligne in commande.lignes.all %}
+          <tr>
+            <td>
+              <strong>{{ ligne.nom_produit }}</strong>
+              {% if ligne.produit %}<br><a href="{% url 'detail_produit' ligne.produit.slug %}" target="_blank" style="font-size:0.78rem;color:var(--rose-fonce);">Voir produit</a>{% endif %}
+            </td>
+            <td>{{ ligne.prix_unitaire }} MAD</td>
+            <td style="text-align:center;">{{ ligne.quantite }}</td>
+            <td style="font-weight:700;">{{ ligne.sous_total }} MAD</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="d-flex justify-content-end p-3">
+        <span style="font-weight:700;font-size:1.1rem;margin-right:1rem;">Total :</span>
+        <span style="font-weight:700;font-size:1.3rem;color:var(--rose-fonce);font-family:'Playfair Display',serif;">{{ commande.montant_total }} MAD</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <!-- Changer statut -->
+    <div class="admin-card mb-4">
+      <div class="admin-card-header"><h6 class="admin-card-title">Modifier le statut</h6></div>
+      <div class="admin-card-body">
+        <form method="post">
+          {% csrf_token %}
+          <label class="admin-form-label">Statut</label>
+          <select name="statut" class="admin-form-control mb-3">
+            {% for key, label in statuts %}
+            <option value="{{ key }}" {% if commande.statut == key %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+          <button type="submit" class="btn-admin btn-admin-primary" style="width:100%;padding:0.7rem;justify-content:center;">Mettre à jour</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Infos client -->
+    <div class="admin-card mb-4">
+      <div class="admin-card-header"><h6 class="admin-card-title">Client</h6></div>
+      <div class="admin-card-body">
+        <p style="margin-bottom:0.4rem;font-size:0.9rem;"><strong>{{ commande.client.first_name }} {{ commande.client.last_name }}</strong></p>
+        <p style="color:var(--texte-clair);font-size:0.85rem;margin-bottom:0.3rem;">{{ commande.client.email }}</p>
+        <p style="color:var(--texte-clair);font-size:0.82rem;margin:0;">Inscrit le {{ commande.client.date_joined|date:"d/m/Y" }}</p>
+      </div>
+    </div>
+
+    <!-- Livraison -->
+    <div class="admin-card">
+      <div class="admin-card-header"><h6 class="admin-card-title">Livraison</h6></div>
+      <div class="admin-card-body" style="font-size:0.88rem;">
+        <p style="margin-bottom:0.3rem;"><strong>Date :</strong> {{ commande.date_commande|date:"d/m/Y à H:i" }}</p>
+        <p style="margin-bottom:0.3rem;"><strong>Adresse :</strong> {{ commande.adresse_livraison }}</p>
+        <p style="margin-bottom:0.3rem;"><strong>Ville :</strong> {{ commande.ville_livraison }} {{ commande.code_postal_livraison }}</p>
+        <p style="margin-bottom:0;"><strong>Pays :</strong> {{ commande.pays_livraison }}</p>
+        {% if commande.notes %}<p style="margin-top:0.5rem;color:var(--texte-clair);"><strong>Notes :</strong> {{ commande.notes }}</p>{% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-3">
+  <a href="{% url 'gestion_commandes' %}" class="btn-admin btn-admin-secondary">← Retour aux commandes</a>
+</div>
+{% endblock %}
