@@ -30,6 +30,14 @@ class Produit(models.Model):
     ingredients = models.TextField(blank=True, help_text='Ingrédients du produit')
     type_peau = models.CharField(max_length=200, blank=True, help_text='Types de peau recommandés')
     contenance = models.CharField(max_length=50, blank=True, help_text='Ex: 50ml, 150ml')
+    en_promotion = models.BooleanField(default=False)
+    prix_promotion = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    @property
+    def prix_actuel(self):
+        if self.en_promotion and self.prix_promotion is not None:
+            return self.prix_promotion
+        return self.prix
 
     def __str__(self):
         return self.nom

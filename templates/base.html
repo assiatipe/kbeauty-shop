@@ -13,13 +13,18 @@
 </head>
 <body>
 
+<!-- ===== ANNOUNCEMENT BAR ===== -->
+<div style="background: linear-gradient(90deg, #e8709a 0%, #d4507a 100%); color: white; text-align: center; padding: 0.6rem; font-size: 0.85rem; font-weight: 700; letter-spacing: 1px;">
+  🎉 OFFRES DU MOMENT : Livraison offerte dès 500 MAD d'achat + Échantillons K-Beauty offerts !
+</div>
+
 <!-- ===== NAVBAR ===== -->
 <nav class="navbar navbar-expand-lg">
   <div class="container">
 
     <!-- LOGO -->
     <a class="navbar-brand" href="{% url 'home' %}" style="display:flex; align-items:center; padding:0;">
-      <svg viewBox="0 0 300 70" width="130" height="46" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 300 70" width="160" height="56" xmlns="http://www.w3.org/2000/svg">
         <circle cx="30" cy="35" r="26" fill="#fde8f0" opacity="0.8"/>
         <circle cx="30" cy="35" r="19" fill="#f7c5d8" opacity="0.6"/>
 
@@ -62,7 +67,7 @@
 
         <li class="nav-item">
           <a class="nav-link {% if request.resolver_match.url_name == 'catalogue' %}active{% endif %}" href="{% url 'catalogue' %}">
-            Produits
+            Tous nos soins
           </a>
         </li>
 
@@ -129,7 +134,7 @@
         {% else %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'login' %}">
-            Connexion
+            Se connecter
           </a>
         </li>
 
@@ -165,7 +170,7 @@
   <div class="container">
     <div class="row g-4">
       <div class="col-lg-4">
-        <svg viewBox="0 0 220 50" width="110" height="36" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:0.8rem;">
+        <svg viewBox="0 0 220 50" width="130" height="42" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:0.8rem;">
           <circle cx="22" cy="25" r="19" fill="#fde8f0" opacity="0.2"/>
           <circle cx="22" cy="25" r="14" fill="#f7c5d8" opacity="0.2"/>
           <rect x="12" y="18" width="20" height="13" rx="5" fill="rgba(255,255,255,0.15)"/>
@@ -250,6 +255,61 @@
     <circle cx="15" cy="10" r="1" fill="white"/>
   </svg>
 </a>
+
+<!-- ===== SOCIAL PROOF TOAST ===== -->
+<div id="social-proof-toast" style="position: fixed; bottom: 2rem; left: 2rem; z-index: 999; background: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 1rem; display: flex; align-items: center; gap: 1rem; transform: translateY(150%); opacity: 0; transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); border-left: 4px solid #e8709a; max-width: 300px;">
+  <div style="font-size: 1.5rem;">🛍️</div>
+  <div>
+    <p id="sp-text" style="margin: 0; font-size: 0.85rem; color: #495057; font-weight: 600; line-height: 1.4;">Quelqu'un a acheté un produit</p>
+    <p id="sp-time" style="margin: 0; font-size: 0.75rem; color: #8c7b9b; margin-top: 0.2rem;">Il y a 5 min</p>
+  </div>
+</div>
+
+<script>
+  let realPurchases = [];
+  
+  async function fetchRealPurchases() {
+    try {
+      const response = await fetch('/orders/api/recent/');
+      const data = await response.json();
+      if (data.purchases && data.purchases.length > 0) {
+        realPurchases = data.purchases;
+      }
+    } catch (error) {
+      console.error('Error fetching purchases:', error);
+    }
+  }
+
+  function triggerSocialProof() {
+    if (realPurchases.length === 0) return; // Wait until data is loaded or if no purchases exist
+    
+    const toast = document.getElementById('social-proof-toast');
+    const purchase = realPurchases[Math.floor(Math.random() * realPurchases.length)];
+    
+    document.getElementById('sp-text').innerHTML = `<strong>${purchase.name}</strong> (${purchase.city}) vient d'acheter <br><span style="color:#e8709a">${purchase.product}</span>`;
+    document.getElementById('sp-time').innerText = purchase.time;
+    
+    // Show toast
+    toast.style.transform = 'translateY(0)';
+    toast.style.opacity = '1';
+    
+    // Hide toast after 5 seconds
+    setTimeout(() => {
+      toast.style.transform = 'translateY(150%)';
+      toast.style.opacity = '0';
+    }, 5000);
+  }
+
+  // Fetch immediately, then trigger occasionally
+  fetchRealPurchases().then(() => {
+    if (realPurchases.length > 0) {
+      setTimeout(() => {
+        triggerSocialProof();
+        setInterval(triggerSocialProof, 25000 + Math.random() * 20000); // Between 25s and 45s
+      }, 3000);
+    }
+  });
+</script>
 
 {% block extra_js %}{% endblock %}
 </body>

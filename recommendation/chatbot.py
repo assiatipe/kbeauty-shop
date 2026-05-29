@@ -15,17 +15,16 @@ Tu aides les clientes à choisir les bons produits selon leur type de peau, leur
 Tes connaissances :
 - Routine K-Beauty en 10 étapes (huile nettoyante, nettoyant mousse, exfoliant, tonique, essence, sérum/ampoule, masque, contour des yeux, hydratant, SPF)
 - Ingrédients actifs coréens : mucin d'escargot, centella asiatica, niacinamide, acides AHA/BHA/PHA, galactomyces, céramides, hyaluronique
-- Types de peau : sèche, grasse, mixte, sensible, acnéique, terne
+- Types de peau : sèche, grasse, mixte, sensible, acnéique, terne, mature
 - Marques disponibles : COSRX, Laneige, Some By Mi, Klairs, Innisfree, Skin1004, Purito, Beauty of Joseon, Dr. Jart+, Mediheal, Missha, The Ordinary, Etude House, Tony Moly, Mizon, Heimish, Pyunkang Yul
 
 Règles :
-- Réponds toujours en français
-- Sois chaleureuse, bienveillante et professionnelle
-- Pose des questions pour mieux comprendre le type de peau et les besoins
-- Recommande des produits concrets disponibles dans la boutique
-- Explique pourquoi tu recommandes chaque produit
-- Reste concise (3-4 phrases max par réponse)
-- Si on te demande quelque chose hors beauté/skincare, recentre poliment la conversation
+- Réponds toujours en français.
+- Sois chaleureuse, bienveillante et professionnelle.
+- Pose des questions pour mieux comprendre le type de peau et les besoins.
+- Recommande des produits concrets disponibles dans la boutique et explique pourquoi.
+- Reste concise (3-4 phrases max par réponse).
+- **Flexibilité** : Tu peux répondre aux questions générales sur la boutique (livraison gratuite dès 399 MAD, paiement à la livraison ou par carte), et tu es ouverte aux discussions plus larges sur le bien-être, le maquillage, ou la beauté en général. N'hésite pas à être conversationnelle !
 """
 
 
@@ -62,44 +61,56 @@ def get_chatbot_response(messages_history):
             data = json.loads(response.read().decode('utf-8'))
             return data['content'][0]['text']
     except urllib.error.HTTPError as e:
-        error_body = e.read().decode('utf-8')
         return get_fallback_response(messages_history[-1]['content'] if messages_history else '')
     except Exception:
         return get_fallback_response(messages_history[-1]['content'] if messages_history else '')
 
 
 def get_fallback_response(user_message):
-    """Réponses de secours basées sur des mots-clés si pas d'API key."""
+    """Réponses de secours plus flexibles basées sur des mots-clés si pas d'API key."""
     msg = user_message.lower()
 
-    if any(w in msg for w in ['bonjour', 'salut', 'hello', 'bonsoir']):
-        return "Bonjour ! Je suis Glow, votre assistante K-Beauty. Quel est votre type de peau et quels sont vos besoins en skincare aujourd'hui ?"
+    # Salutations
+    if any(w in msg for w in ['bonjour', 'salut', 'hello', 'bonsoir', 'coucou']):
+        return "Bonjour ! Je suis Glow, votre assistante K-Beauty. ✨ Quel est votre type de peau et quels sont vos besoins aujourd'hui ?"
 
+    # Remerciements
+    if any(w in msg for w in ['merci', 'thank', 'super', 'génial', 'top', 'parfait']):
+        return "Avec grand plaisir ! 🥰 N'hésitez pas si vous avez d'autres questions sur nos produits ou votre routine."
+
+    # Questions de boutique (livraison, paiement)
+    if any(w in msg for w in ['livraison', 'expedition', 'délai', 'livrer']):
+        return "La livraison est offerte à partir de 399 MAD d'achat ! 📦 Nous livrons partout au Maroc en 24h à 48h jours ouvrés."
+    if any(w in msg for w in ['paiement', 'payer', 'carte', 'cash']):
+        return "Vous pouvez payer en toute sécurité par carte bancaire sur le site, ou opter pour le paiement à la livraison (Cash on Delivery) ! 💳"
+
+    # Skincare - Types de peau
     if any(w in msg for w in ['sèche', 'seche', 'tiraillement', 'déshydrat']):
-        return "Pour une peau sèche, je vous recommande l'**Essence COSRX Snail Mucin 96%** pour l'hydratation profonde, associée à la **Laneige Water Sleeping Mask** le soir. Le **Klairs Supple Preparation Toner** sans alcool est aussi parfait comme première étape."
-
+        return "Pour une peau sèche, je vous recommande vivement l'**Essence COSRX Snail Mucin 96%** pour l'hydratation profonde, associée au **Laneige Water Sleeping Mask** le soir. 💧"
     if any(w in msg for w in ['grasse', 'brillance', 'pores', 'sébum']):
-        return "Pour une peau grasse, le **Some By Mi AHA BHA PHA Toner** désobstrue les pores et contrôle le sébum. Le **The Ordinary Niacinamide 10%** est excellent pour réduire la brillance. Choisissez des textures gel légères."
-
+        return "Pour une peau grasse, le **Some By Mi AHA BHA PHA Toner** désobstrue les pores et contrôle le sébum. Le **The Ordinary Niacinamide 10%** est excellent pour réduire la brillance. ✨"
     if any(w in msg for w in ['acné', 'bouton', 'imperfection', 'cicatrice']):
-        return "Pour l'acné, le duo **COSRX Low pH Cleanser** + **COSRX Snail 96 Serum** est très efficace. Le BHA du nettoyant nettoie les pores, et le mucin d'escargot répare les cicatrices. Ajoutez le **Some By Mi Toner** pour un traitement complet."
-
+        return "Pour l'acné, le duo **COSRX Low pH Cleanser** + **COSRX Snail 96 Serum** est très efficace. Le BHA nettoie les pores, et le mucin d'escargot répare les cicatrices. 🌿"
     if any(w in msg for w in ['sensible', 'rouge', 'réactive', 'irrité']):
-        return "Pour une peau sensible, la **Skin1004 Centella Ampoule** calme les rougeurs immédiatement. Le **Klairs Toner** sans alcool ni parfum est idéal. Évitez les acides forts et commencez doucement avec la routine."
-
+        return "Pour une peau sensible, la **Skin1004 Centella Ampoule** calme les rougeurs immédiatement. Le **Klairs Toner** sans alcool ni parfum est également idéal pour apaiser. 🌸"
+    if any(w in msg for w in ['mature', 'rides', 'anti-âge', 'anti age', 'vieillissement']):
+        return "Pour l'anti-âge, misez sur la **Missha Time Revolution Night Repair Ampoule** (souvent comparée au sérum Estée Lauder) et la crème **Beauty of Joseon Dynasty Cream** au ginseng et eau de riz ! 🌟"
+    
+    # Préoccupations spécifiques
     if any(w in msg for w in ['tache', 'hyperpigmentation', 'teint', 'lumineux', 'éclat']):
-        return "Pour les taches et l'éclat, le **Some By Mi Yuja Niacin Serum** est très efficace en 30 jours. La **Missha Time Revolution Essence** aux ferments illumine le teint. Associez avec un bon SPF comme le **Beauty of Joseon Relief Sun**."
-
+        return "Pour les taches et l'éclat, le **Some By Mi Yuja Niacin Serum** est très efficace. Associez-le avec un bon SPF comme le **Beauty of Joseon Relief Sun** pour prévenir de nouvelles taches. ☀️"
     if any(w in msg for w in ['soleil', 'spf', 'protection', 'solaire']):
-        return "Pour la protection solaire, le **Beauty of Joseon Relief Sun SPF50+** est notre best-seller : texture ultraléger, fini naturel. Le **Purito Daily Sunscreen** est parfait pour les peaux sensibles ou enceintes."
+        return "Le **Beauty of Joseon Relief Sun SPF50+** est notre grand best-seller : texture ultralégère, aucun fini blanc. Le **Isntree Hyaluronic Acid Watery Sun Gel** est aussi exceptionnel pour l'hydratation. ☀️"
+    if any(w in msg for w in ['vegan', 'cruelty-free', 'cruelty free', 'animal']):
+        return "Beaucoup de nos marques coréennes sont cruelty-free ! **COSRX**, **Klairs**, et **Purito** proposent d'excellentes gammes 100% vegan et respectueuses des animaux. 🐰💚"
 
+    # Routine et autres
     if any(w in msg for w in ['routine', 'commencer', 'débutant', 'étape']):
-        return "Pour débuter la routine K-Beauty, commencez avec 3 étapes simples : **1) Nettoyant** (Banila Co Balm + COSRX Foam), **2) Hydratant** (COSRX Snail Essence), **3) SPF** (Beauty of Joseon). Ajoutez des étapes progressivement !"
-
+        return "Pour débuter, commencez par 3 étapes : **1) Nettoyant** (ex: COSRX Low pH), **2) Hydratant** (ex: Sérum ou Crème Centella), **3) Protection Solaire** le matin. Vous pourrez ajouter des étapes ensuite ! 🧴"
     if any(w in msg for w in ['masque', 'sheet mask']):
-        return "Pour les masques sheet, le **Mediheal N.M.F Aquaring** est le plus populaire au monde pour l'hydratation. Le **Skin1004 Centella Mask** est parfait après une exposition au soleil ou pour calmer la peau irritée."
-
+        return "Pour les masques en tissu (sheet masks), la gamme **Mediheal** est numéro 1 en Corée pour l'hydratation express ! 💦"
     if any(w in msg for w in ['prix', 'budget', 'pas cher', 'abordable']):
-        return "Excellents rapports qualité-prix : **Tony Moly Sheet Mask** (35 MAD), **The Ordinary Niacinamide** (139 MAD), **COSRX Low pH Cleanser** (159 MAD). Ces produits coréens sont efficaces sans se ruiner !"
+        return "K-Beauty rime avec accessibilité ! D'excellents produits abordables incluent la marque **The Ordinary**, le nettoyant **COSRX**, ou les petits masques **Tony Moly**. 💸"
 
-    return "Je suis là pour vous aider à construire votre routine K-Beauty ! Pouvez-vous me décrire votre type de peau (sèche, grasse, mixte, sensible) et vos principales préoccupations (hydratation, acné, taches, rides...) ?"
+    # Si rien ne correspond, une réponse d'attente amicale et ouverte
+    return "Je vois ! Mon système est actuellement en mode simplifié (hors-ligne), mais je peux tout à fait vous conseiller sur les routines de peau, les problèmes spécifiques (acné, taches, hydratation), ou les infos pratiques de notre boutique (livraison, paiement). Que souhaitez-vous savoir ? ✨"

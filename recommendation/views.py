@@ -60,3 +60,8 @@ def chatbot_api(request):
 def chatbot_page(request):
     """Page dédiée au chatbot."""
     return render(request, 'recommendation/chatbot.html')
+
+
+def diagnostic_page(request):
+    """Page du diagnostic de peau interactif."""
+    return render(request, 'recommendation/diagnostic.html')

@@ -70,7 +70,15 @@
       </div>
 
       <!-- Prix -->
-      <div class="price-tag mb-3">{{ produit.prix }} MAD</div>
+      <div class="price-tag mb-3">
+        {% if produit.en_promotion %}
+          <del style="color:#adb5bd; font-size:1.2rem; margin-right:0.6rem; font-weight:400;">{{ produit.prix }} MAD</del>
+          <span style="color:#e8709a;">{{ produit.prix_actuel }} MAD</span>
+          <span style="background:#e8709a; color:white; padding:0.2rem 0.8rem; border-radius:20px; font-size:0.8rem; margin-left:1rem; vertical-align:middle; box-shadow:0 4px 10px rgba(232,112,154,0.4);">PROMO</span>
+        {% else %}
+          {{ produit.prix }} MAD
+        {% endif %}
+      </div>
 
       <!-- Stock -->
       {% if produit.en_stock %}

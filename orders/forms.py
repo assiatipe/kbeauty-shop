@@ -24,3 +24,14 @@ class CommandeForm(forms.Form):
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Instructions spéciales (optionnel)'}),
         label='Notes'
     )
+    
+    MODES_PAIEMENT = [
+        ('livraison', 'Paiement à la livraison'),
+        ('carte', 'Carte Bancaire'),
+    ]
+    mode_paiement = forms.ChoiceField(
+        choices=MODES_PAIEMENT,
+        widget=forms.RadioSelect(attrs={'class': 'form-check-input'}),
+        initial='livraison',
+        label='Mode de paiement'
+    )

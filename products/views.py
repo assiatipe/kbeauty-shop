@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Q
+from django.db.models import Q, Count
 
 from .models import Produit, Categorie
 from reviews.models import Avis
@@ -94,24 +94,34 @@ def catalogue(request):
         disponible=True
     ).select_related('categorie')
 
-    categories = Categorie.objects.all().order_by('nom')
+    categories = Categorie.objects.annotate(
+        produit_count=Count('produits', filter=Q(produits__disponible=True))
+    ).order_by('nom')
 
     categorie_slug = request.GET.get('categorie')
     q = request.GET.get('q', '').strip()
     tri = request.GET.get('tri', 'date')
+    en_stock = request.GET.get('en_stock')
+
+    if en_stock == 'on' or en_stock == 'true':
+        produits = produits.filter(quantite_stock__gt=0)
 
     if categorie_slug:
         produits = produits.filter(categorie__slug=categorie_slug)
 
     if q:
-        produits = produits.filter(
-            Q(nom__icontains=q) |
-            Q(description__icontains=q) |
-            Q(marque__icontains=q) |
-            Q(ingredients__icontains=q) |
-            Q(type_peau__icontains=q) |
-            Q(categorie__nom__icontains=q)
-        )
+        words = q.split()
+        query = Q()
+        for word in words:
+            query |= (
+                Q(nom__icontains=word) |
+                Q(description__icontains=word) |
+                Q(marque__icontains=word) |
+                Q(ingredients__icontains=word) |
+                Q(type_peau__icontains=word) |
+                Q(categorie__nom__icontains=word)
+            )
+        produits = produits.filter(query).distinct()
 
     if tri == 'prix_asc':
         produits = produits.order_by('prix')
@@ -143,6 +153,7 @@ def catalogue(request):
         'categorie_active': categorie_active,
         'q': q,
         'tri': tri,
+        'en_stock': en_stock,
     })
 
 

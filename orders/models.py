@@ -13,8 +13,14 @@ class Commande(models.Model):
         ('annulee', 'Annulée'),
     ]
 
+    MODES_PAIEMENT = [
+        ('livraison', 'Paiement à la livraison'),
+        ('carte', 'Carte Bancaire'),
+    ]
+
     client = models.ForeignKey(User, on_delete=models.CASCADE, related_name='commandes')
     statut = models.CharField(max_length=20, choices=STATUTS, default='en_attente')
+    mode_paiement = models.CharField(max_length=20, choices=MODES_PAIEMENT, default='livraison')
     date_commande = models.DateTimeField(auto_now_add=True)
     date_mise_a_jour = models.DateTimeField(auto_now=True)
     adresse_livraison = models.TextField()
