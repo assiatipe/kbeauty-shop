@@ -14,12 +14,12 @@ SECRET_KEY = os.getenv(
 DEBUG = os.getenv("DJANGO_DEBUG", os.getenv("DEBUG", "1")) == "1"
 
 ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.getenv(
-        "DJANGO_ALLOWED_HOSTS",
-        os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,0.0.0.0")
-    ).split(",")
-    if host.strip()
+    "*"
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://glowkr-kbeauty-shop.84.8.221.206.sslip.io",
+    "https://glowkr-kbeauty-shop.84.8.221.206.sslip.io",
 ]
 
 INSTALLED_APPS = [
