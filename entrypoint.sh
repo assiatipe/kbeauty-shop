@@ -20,17 +20,15 @@ python seed_data.py || true
 echo "Création du superutilisateur admin..."
 python manage.py shell <<'ADMINEOF'
 from django.contrib.auth.models import User
-if not User.objects.filter(is_superuser=True).exists():
-    User.objects.create_superuser(
-        username='admin',
-        email='admin@glowkr.com',
-        password='admin123',
-        first_name='Admin',
-        last_name='Glow.kr'
-    )
-    print("Superuser 'admin' créé avec succès.")
-else:
-    print("Un superuser existe déjà, rien à faire.")
+user, created = User.objects.get_or_create(
+    username='admin',
+    defaults={'email': 'admin@glowkr.com', 'first_name': 'Admin', 'last_name': 'Glow.kr'}
+)
+user.set_password('admin123')
+user.is_staff = True
+user.is_superuser = True
+user.save()
+print("Superuser 'admin' créé." if created else "Superuser 'admin' mis à jour.")
 ADMINEOF
 
 echo "Attribution automatique des images aux produits..."
