@@ -37,7 +37,7 @@ services:
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
 
     expose:
-      - "80041"
+      - "8041"
 
     volumes:
       - media_data:/app/media
@@ -46,7 +46,7 @@ services:
       db:
         condition: service_healthy
 
-    command: python manage.py runserver 0.0.0.0:80041
+    command: python manage.py runserver 0.0.0.0:8041
 
 volumes:
   db_data:

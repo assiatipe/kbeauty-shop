@@ -32,10 +32,10 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Port utilisé par Django
-EXPOSE 80041
+EXPOSE 8041
 
 # Script lancé au démarrage du conteneur
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Commande par défaut : version atelier avec runserver
-CMD ["python", "manage.py", "runserver", "0.0.0.0:80041"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8041"]
