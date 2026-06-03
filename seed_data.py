@@ -475,6 +475,40 @@ def create_categories():
 
 
 def create_products(categories_dict):
+    IMAGE_MAPPING = {
+        "haruharu-wonder-black-rice-hyaluronic-toner": "haruharu-toner.png",
+        "anua-heartleaf-77-soothing-toner": "Anua_Heartleaf_77_Soothing_Toner.jpg",
+        "cosrx-advanced-snail-96-mucin-power-essence": "COSRX_Advanced_Snail_96_Mucin_Power_Essence.jpg",
+        "im-from-rice-toner": "Im_From_Rice_Toner.webp",
+        "anua-peach-70-niacin-serum": "Anua_Peach_70_Niacin_Serum.webp",
+        "skin1004-madagascar-centella-ampoule": "SKIN1004_Madagascar_Centella_Ampoule.webp",
+        "beauty-of-joseon-glow-serum-propolis-niacinamide": "Beauty_of_Joseon_Glow_Serum_Propolis__Niacinamide.webp",
+        "cosrx-the-vitamin-c-23-serum": "COSRX_The_Vitamin_C_23_Serum.webp",
+        "some-by-mi-yuja-niacin-30-days-blemish-care-serum": "Some_By_Mi_Yuja_Niacin_30_Days_Blemish_Care_Serum.webp",
+        "beauty-of-joseon-dynasty-cream": "Beauty_of_Joseon_Dynasty_Cream.webp",
+        "torriden-dive-in-soothing-cream": "Torriden_DIVE-IN_Soothing_Cream.jpg",
+        "dr-jart-cicapair-tiger-grass-cream": "Dr._Jart_Cicapair_Tiger_Grass_Cream.jpg",
+        "illiyoon-ceramide-ato-concentrate-cream": "Illiyoon_Ceramide_Ato_Concentrate_Cream.jpg",
+        "cosrx-low-ph-good-morning-gel-cleanser": "COSRX_Low_pH_Good_Morning_Gel_Cleanser.webp",
+        "round-lab-1025-dokdo-cleanser": "Round_Lab_1025_Dokdo_Cleanser.webp",
+        "heimish-all-clean-balm": "Heimish_All_Clean_Balm.jpg",
+        "banila-co-clean-it-zero-cleansing-balm-original": "Banila_Co_Clean_It_Zero_Cleansing_Balm_Original.webp",
+        "mediheal-tea-tree-essential-mask": "Mediheal_Tea_Tree_Essential_Mask.webp",
+        "mediheal-nmf-aquaring-ampoule-mask": "Mediheal_N.M.F_Aquaring_Ampoule_Mask.jpg",
+        "dr-jart-dermask-water-jet-vital-hydra-solution": "Dr._Jart_Dermask_Water_Jet_Vital_Hydra_Solution.webp",
+        "beauty-of-joseon-relief-sun-rice-probiotics-spf50": "Beauty_of_Joseon_Relief_Sun_Rice__Probiotics_SPF50.webp",
+        "skin1004-madagascar-centella-hyalu-cica-water-fit-sun-serum-spf50": "SKIN1004_Madagascar_Centella_Hyalu-Cica_Water-Fit_Sun_Serum_SPF50.webp",
+        "isntree-hyaluronic-acid-watery-sun-gel-spf50": "Isntree_Hyaluronic_Acid_Watery_Sun_Gel_SPF50.jpg",
+        "round-lab-birch-juice-moisturizing-sunscreen-spf50": "Round_Lab_Birch_Juice_Moisturizing_Sunscreen_SPF50.jpg",
+        "beauty-of-joseon-revive-eye-serum-ginseng-retinal": "Beauty_of_Joseon_Revive_Eye_Serum_Ginseng__Retinal.jpeg",
+        "mizon-snail-repair-eye-cream": "Mizon_Snail_Repair_Eye_Cream.jpg",
+        "benton-fermentation-eye-cream": "Benton_Fermentation_Eye_Cream.jpg",
+        "some-by-mi-aha-bha-pha-30-days-miracle-toner": "Some_By_Mi_Yuja_Niacin_30_Days_Blemish_Care_Serum.webp",
+        "cosrx-bha-blackhead-power-liquid": "COSRX_Advanced_Snail_96_Mucin_Power_Essence.jpg",
+        "isntree-chestnut-aha-8-clear-essence": "Isntree_Chestnut_AHA_8_Clear_Essence.webp",
+        "beauty-of-joseon-apricot-blossom-peeling-gel": "boj-cream.png"
+    }
+
     for data in PRODUITS:
         categorie = categories_dict[data["categorie"]]
         slug = slugify(data["nom"])
@@ -492,8 +526,11 @@ def create_products(categories_dict):
             "contenance": data["contenance"],
         }
 
-        if image_exists(data["image"]):
-            defaults["image"] = f"products/{data['image']}"
+        image_name = IMAGE_MAPPING.get(slug, data["image"])
+        if image_exists(image_name):
+            defaults["image"] = f"products/{image_name}"
+        else:
+            defaults["image"] = ""
 
         produit, created = Produit.objects.update_or_create(
             slug=slug,

@@ -49,7 +49,16 @@ if not images:
 else:
     for i, produit in enumerate(produits):
         if not produit.image:
-            produit.image = f"products/{images[i % len(images)]}"
+            matched_img = None
+            slug = produit.slug.lower()
+            for img in images:
+                img_normalized = img.lower().replace("_", "-").replace(" ", "-")
+                if slug in img_normalized or img_normalized.startswith(slug):
+                    matched_img = img
+                    break
+            if not matched_img:
+                matched_img = images[i % len(images)]
+            produit.image = f"products/{matched_img}"
             produit.save()
     print(f"{len(images)} images disponibles.")
     print(f"{Produit.objects.exclude(image='').count()} produits ont une image.")
