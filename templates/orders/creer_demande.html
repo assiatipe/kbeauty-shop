@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}Commande Personnalisée (YesStyle) — A.D.S PRODUCTS{% endblock %}
+{% block content %}
+<div class="container" style="padding-top:3rem; padding-bottom:4rem;">
+  <div class="text-center mb-4">
+    <h1 class="section-title mb-1">Commande Spéciale YesStyle ✈️</h1>
+    <p class="text-muted" style="font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+      Vous avez repéré un produit sur YesStyle qui n'est pas dans notre catalogue ? 
+      Saisissez ses détails ci-dessous. Nous le commandons en Espagne 🇪🇸 puis nous vous le livrons chez vous au Maroc 🇲🇦 !
+    </p>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="form-card" style="background: var(--blanc); border-radius: var(--rayon-lg); padding: 2.5rem; box-shadow: 0 10px 30px var(--ombre); border: 1px solid #f0eaf8;">
+        
+        <div class="d-flex justify-content-center align-items-center gap-3 mb-4 p-3" style="background: #f8f6fc; border-radius: 12px; border: 1px dashed var(--rose-clair);">
+          <span style="font-size: 2rem;">🇪🇸</span>
+          <div style="font-weight: 700; color: var(--texte); font-size: 0.95rem;">
+            Acheminement Espagne ➔ Maroc 
+            <span style="display: block; font-weight: 400; font-size: 0.8rem; color: var(--texte-clair);">Livraison sécurisée et frais de douane optimisés</span>
+          </div>
+          <span style="font-size: 2rem;">🇲🇦</span>
+        </div>
+
+        <form action="" method="post">
+          {% csrf_token %}
+          
+          <h5 style="font-family:'Nunito', sans-serif; font-weight:700; margin-bottom:1.2rem; color: var(--rose-fonce);">1. Détails du produit souhaité</h5>
+          
+          <div class="mb-3">
+            <label class="form-label font-weight-bold">Nom / Marque du produit <span class="text-danger">*</span></label>
+            {{ form.nom_produit }}
+            <div class="form-text">Spécifiez la marque et le nom complet (ex: *Beauty of Joseon - Relief Sun*).</div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label font-weight-bold">Lien de la page produit YesStyle <span class="text-danger">*</span></label>
+            {{ form.lien_yesstyle }}
+            <div class="form-text">Copiez-collez l'adresse web complète de la page du produit.</div>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-4">
+              <label class="form-label font-weight-bold">Quantité <span class="text-danger">*</span></label>
+              {{ form.quantite }}
+            </div>
+            <div class="col-md-8">
+              <label class="form-label font-weight-bold">Teinte / Taille / Options</label>
+              {{ form.options }}
+              <div class="form-text">Ex: *Teinte #21*, *150 ml*, etc.</div>
+            </div>
+          </div>
+
+          <h5 style="font-family:'Nunito', sans-serif; font-weight:700; margin-top:2rem; margin-bottom:1.2rem; color: var(--rose-fonce);">2. Vos informations de contact</h5>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label font-weight-bold">Votre nom complet <span class="text-danger">*</span></label>
+              {{ form.nom_client }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label font-weight-bold">Téléphone / WhatsApp ou Email <span class="text-danger">*</span></label>
+              {{ form.contact_client }}
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label font-weight-bold">Notes additionnelles (optionnel)</label>
+            {{ form.notes }}
+          </div>
+
+          <button type="submit" class="btn-rose w-100" style="padding: 1rem; font-size: 1.1rem; font-weight: 700; box-shadow: 0 4px 15px rgba(219,88,136,0.35);">
+            Soumettre ma demande de commande 🚀
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -15,4 +15,5 @@ urlpatterns = [
     path('commandes/<int:commande_id>/', views.detail_commande_admin, name='detail_commande_admin'),
     path('clients/', views.gestion_clients, name='gestion_clients'),
     path('stocks/', views.gestion_stocks, name='gestion_stocks'),
+    path('demandes/', views.gestion_demandes, name='gestion_demandes'),
 ]

@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Commande, LigneCommande
+from .models import Commande, LigneCommande, DemandeProduit
 from cart.models import Panier
-from .forms import CommandeForm
+from .forms import CommandeForm, DemandeProduitForm
 
 
 @login_required
@@ -150,3 +150,28 @@ def recent_purchases_api(request):
         })
         
     return JsonResponse({'purchases': purchases})
+
+
+def creer_demande_produit(request):
+    if request.method == 'POST':
+        form = DemandeProduitForm(request.POST)
+        if form.is_valid():
+            demande = form.save(commit=False)
+            if request.user.is_authenticated:
+                demande.client = request.user
+            demande.save()
+            messages.success(request, "Votre demande de produit personnalisé a bien été reçue ! Nous vous contacterons très vite.")
+            return redirect('catalogue')
+    else:
+        initial = {}
+        if request.user.is_authenticated:
+            initial['nom_client'] = f"{request.user.first_name} {request.user.last_name}".strip() or request.user.username
+            initial['contact_client'] = request.user.email
+            try:
+                if request.user.profil.telephone:
+                    initial['contact_client'] = request.user.profil.telephone
+            except:
+                pass
+        form = DemandeProduitForm(initial=initial)
+    
+    return render(request, 'orders/creer_demande.html', {'form': form})

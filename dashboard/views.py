@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.db.models import Sum, Count, Q
 from django.contrib.auth.models import User
 from products.models import Produit, Categorie
-from orders.models import Commande, LigneCommande
+from orders.models import Commande, LigneCommande, DemandeProduit
 from django.utils import timezone
 from datetime import timedelta
 from .forms import ProduitForm, CategorieForm
@@ -208,4 +208,30 @@ def gestion_stocks(request):
         'produits': produits,
         'produits_rupture_count': produits_rupture_count,
         'produits_stock_faible_count': produits_stock_faible_count,
+    })
+
+
+@staff_member_required
+def gestion_demandes(request):
+    statut_filtre = request.GET.get('statut', '')
+    demandes = DemandeProduit.objects.select_related('client').order_by('-date_soumission')
+    if statut_filtre:
+        demandes = demandes.filter(statut=statut_filtre)
+        
+    if request.method == 'POST':
+        demande_id = request.POST.get('demande_id')
+        nouveau_statut = request.POST.get('statut')
+        try:
+            demande = DemandeProduit.objects.get(id=demande_id)
+            demande.statut = nouveau_statut
+            demande.save()
+            messages.success(request, f'Demande de {demande.nom_client} mise à jour.')
+        except DemandeProduit.DoesNotExist:
+            messages.error(request, 'Demande introuvable.')
+        return redirect('gestion_demandes')
+        
+    return render(request, 'dashboard/demandes.html', {
+        'demandes': demandes,
+        'statuts': DemandeProduit.STATUTS,
+        'statut_filtre': statut_filtre,
     })

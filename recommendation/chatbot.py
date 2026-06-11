@@ -9,7 +9,7 @@ import urllib.error
 import os
 
 
-SYSTEM_PROMPT = """Tu es Glow, l'assistante beauté de la boutique Glow.kr spécialisée en K-Beauty (skincare coréen).
+SYSTEM_PROMPT = """Tu es l'assistante beauté de la boutique A.D.S PRODUCTS spécialisée en K-Beauty (skincare coréen).
 Tu aides les clientes à choisir les bons produits selon leur type de peau, leurs problèmes cutanés et leur budget.
 
 Tes connaissances :
@@ -72,7 +72,7 @@ def get_fallback_response(user_message):
 
     # Salutations
     if any(w in msg for w in ['bonjour', 'salut', 'hello', 'bonsoir', 'coucou']):
-        return "Bonjour ! Je suis Glow, votre assistante K-Beauty. ✨ Quel est votre type de peau et quels sont vos besoins aujourd'hui ?"
+        return "Bonjour ! Je suis l'assistante K-Beauty de A.D.S PRODUCTS. ✨ Quel est votre type de peau et quels sont vos besoins aujourd'hui ?"
 
     # Remerciements
     if any(w in msg for w in ['merci', 'thank', 'super', 'génial', 'top', 'parfait']):

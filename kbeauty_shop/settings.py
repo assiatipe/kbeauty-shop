@@ -18,8 +18,8 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://glowkr-kbeauty-shop.84.8.221.206.sslip.io",
-    "https://glowkr-kbeauty-shop.84.8.221.206.sslip.io",
+    "http://ads-products.84.8.221.206.sslip.io",
+    "https://ads-products.84.8.221.206.sslip.io",
 ]
 
 INSTALLED_APPS = [
@@ -136,6 +136,8 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "False") == "True"
     CSRF_COOKIE_SECURE = os.getenv("CSRF_COOKIE_SECURE", "False") == "True"
 
-CSRF_TRUSTED_ORIGINS = [
+env_origins = [
     origin.strip() for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",") if origin.strip()
 ]
+if env_origins:
+    CSRF_TRUSTED_ORIGINS = env_origins

@@ -35,3 +35,20 @@ class CommandeForm(forms.Form):
         initial='livraison',
         label='Mode de paiement'
     )
+
+
+from .models import DemandeProduit
+
+class DemandeProduitForm(forms.ModelForm):
+    class Meta:
+        model = DemandeProduit
+        fields = ['nom_produit', 'lien_yesstyle', 'quantite', 'options', 'nom_client', 'contact_client', 'notes']
+        widgets = {
+            'nom_produit': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: COSRX Snail Mucin Essence'}),
+            'lien_yesstyle': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://www.yesstyle.com/fr/...'}),
+            'quantite': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
+            'options': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Teinte #21, 150ml (optionnel)'}),
+            'nom_client': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Votre nom et prénom'}),
+            'contact_client': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'N° Téléphone / WhatsApp ou Email'}),
+            'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Précisions supplémentaires sur le produit...'}),
+        }

@@ -60,3 +60,35 @@ class LigneCommande(models.Model):
     class Meta:
         verbose_name = "Ligne Commande"
         verbose_name_plural = "Lignes Commande"
+
+
+class DemandeProduit(models.Model):
+    STATUTS = [
+        ('recue', 'Reçue'),
+        ('commandee', 'Commandée sur YesStyle'),
+        ('arrivee_espagne', 'Arrivée en Espagne 🇪🇸'),
+        ('en_route_maroc', 'En route vers le Maroc 🇲🇦'),
+        ('livree', 'Livrée au client'),
+        ('annulee', 'Annulée'),
+    ]
+
+    client = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='demandes_produits')
+    nom_produit = models.CharField(max_length=250, verbose_name="Nom / Marque du produit")
+    lien_yesstyle = models.URLField(max_length=500, verbose_name="Lien YesStyle", help_text="Copiez-collez le lien du produit sur YesStyle")
+    quantite = models.PositiveIntegerField(default=1, verbose_name="Quantité")
+    options = models.CharField(max_length=200, blank=True, verbose_name="Teinte / Taille / Options", help_text="Ex: Teinte #21, Taille unique, etc.")
+    
+    nom_client = models.CharField(max_length=100, verbose_name="Votre Nom complet")
+    contact_client = models.CharField(max_length=100, verbose_name="Téléphone / WhatsApp ou Email")
+    notes = models.TextField(blank=True, verbose_name="Notes additionnelles")
+    
+    statut = models.CharField(max_length=30, choices=STATUTS, default='recue')
+    date_soumission = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Demande de {self.nom_client} - {self.nom_produit}"
+
+    class Meta:
+        verbose_name = "Demande de produit personnalisé"
+        verbose_name_plural = "Demandes de produits personnalisés"
+        ordering = ['-date_soumission']
